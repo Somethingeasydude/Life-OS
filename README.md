@@ -36,3 +36,38 @@ pillars until the Phase 1 habit holds for ~2–3 weeks.
 - A missed day is never a failure state — just restart from Capture.
 - Reorganizing this system is not work. Only pillar-advancing tasks count.
 - Every task must tag a pillar, or it doesn't belong here.
+
+## Migration from the old RAM-OS vault
+
+Starting clean. The prior Obsidian vault (OFFER.md, RAM-Voice.md, client
+docs, Notion CRM) stays intact as **archived reference** — it is not
+merged into this repo. Only what's currently live got carried over: the
+Hope Baptist thread and the UI deadline (see `Tasks.md`). Point Obsidian
+at this repo as a fresh vault via the Git plugin; don't try to reconcile
+the old structure into it.
+
+## Capture — open question to validate yourself
+
+The plan is a Claude.ai Project with a GitHub connector pointed at this
+repo, used from your phone, so capture is just talking. **You need to
+confirm it's actually under 10 seconds in practice** (app open → message
+sent → committed) — if it isn't, capture has friction and the system is
+at risk (invariant I1). If it's too slow, the fallback is a dumb-fast
+front end for capture only (e.g. a Telegram message or an iOS Shortcut
+that appends one line to `Inbox.md`), with the Project handling
+clarify/query instead. Report back after testing it for a few days.
+
+## Dashboard
+
+`site/` is a static, read-only dashboard (pillar health + Today list)
+built from the files in this repo. Deploy by importing this repo in
+Vercel (vercel.com/new) — `vercel.json` at the repo root points it at
+`site/build.js`, so every push rebuilds the dashboard automatically. No
+credentials required; it only reads files already checked out during the
+build.
+
+## Weekly review reminder
+
+A scheduled prompt fires **Sundays at 6:00 PM Eastern** to run the weekly
+review. Change the time by asking Claude to update the
+`RAM-OS Weekly Review` trigger.

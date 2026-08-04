@@ -20,4 +20,6 @@ system yet — send it back to the inbox or cut it.
 
 ### #revenue-ops
 
-- [ ]
+- [ ] Hope Baptist — confirm current next action / status
+- [ ] UI certification — confirm exact deadline and remaining steps
+- [ ] Systemize Claw's lead recon into a repeatable process
