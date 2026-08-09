@@ -9,6 +9,7 @@
 | Date | $ booked this month | Signal (G/Y/R) |
 |---|---|---|
 | | Pre-revenue, active pipeline | Y |
+| 2026-08-09 | Still pre-revenue this month; Hope Baptist retainer already paid for the year, no new bookings | Y |
 
 ## Notes
 

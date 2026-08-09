@@ -9,6 +9,7 @@
 | Date | Weeks of runway | Signal (G/Y/R) |
 |---|---|---|
 | | Unknown — pending cash-on-hand number | R |
+| 2026-08-09 | Unknown — still pending cash-on-hand number | R |
 
 ## Notes
 
