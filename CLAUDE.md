@@ -56,7 +56,14 @@ Same bar Claw holds itself to, confirmed by Robert:
 - If given a Vercel token or any other credential, scope actions to the
   `life-os` project only.
 
-## Known environment constraints
+## Known environment constraints (system upkeep, not pillar work)
+
+- claude.ai Project's GitHub connector: read works, write fails with a
+  403. Likely the fine-grained token was created Read-only instead of
+  Read-and-write. RAM confirmed the same failure independently. Fix:
+  regenerate the token with Contents set to Read-and-write, reauthorize
+  the connector. Not urgent — this session already writes to the repo
+  fine, so capture isn't blocked, just not yet available from the Project.
 
 This runs in a sandboxed Claude Code Remote container: outbound network
 is policy-restricted (confirmed blocked: `api.vercel.com`), and the
