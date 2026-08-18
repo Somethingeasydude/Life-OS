@@ -13,8 +13,27 @@ function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function parseChecklist(md, headingLine, stopAtNextHeading) {
-  const lines = md.split('\n');
+// Escapes, then renders markdown **bold** as <strong> — the only markdown
+// construct these files actually use.
+function md(s) {
+  return escapeHtml(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+// Splits a status-table cell into a short headline + supporting detail,
+// e.g. "~0 weeks. Way2Go $4..." -> ("~0 weeks", "Way2Go $4...")
+function splitHeadline(text) {
+  const stripped = text.replace(/\*\*/g, '');
+  const periodIdx = stripped.indexOf('. ');
+  const dashIdx = stripped.indexOf(' — ');
+  const candidates = [periodIdx, dashIdx].filter((i) => i > 0 && i < 60);
+  if (!candidates.length) return { headline: text, detail: '' };
+  const cut = Math.min(...candidates);
+  const sep = stripped[cut] === '.' ? 2 : 3;
+  return { headline: text.slice(0, cut).replace(/\*\*/g, ''), detail: text.slice(cut + sep) };
+}
+
+function parseChecklist(mdText, headingLine, stopAtNextHeading) {
+  const lines = mdText.split('\n');
   const start = lines.findIndex((l) => l.trim() === headingLine);
   const items = [];
   if (start === -1) return items;
@@ -27,8 +46,8 @@ function parseChecklist(md, headingLine, stopAtNextHeading) {
   return items;
 }
 
-function parseBacklog(md) {
-  const lines = md.split('\n');
+function parseBacklog(mdText) {
+  const lines = mdText.split('\n');
   const start = lines.findIndex((l) => l.trim() === '## Backlog');
   const pillars = {};
   let current = null;
@@ -53,11 +72,11 @@ const STATUS = {
   R: { word: 'At risk', color: '#ef4444' },
 };
 
-function parsePillar(md) {
-  const role = (md.match(/\*\*Role:\*\*\s*(.*)/) || [])[1] || '';
-  const objective = (md.match(/\*\*Objective:\*\*\s*(.*)/) || [])[1] || '';
-  const signal = (md.match(/\*\*Health signal:\*\*\s*(.*)/) || [])[1] || '';
-  const rows = [...md.matchAll(/^\|(?!-{3,})(.+)\|$/gm)]
+function parsePillar(mdText) {
+  const role = (mdText.match(/\*\*Role:\*\*\s*(.*)/) || [])[1] || '';
+  const objective = (mdText.match(/\*\*Objective:\*\*\s*(.*)/) || [])[1] || '';
+  const signal = (mdText.match(/\*\*Health signal:\*\*\s*(.*)/) || [])[1] || '';
+  const rows = [...mdText.matchAll(/^\|(?!-{3,})(.+)\|$/gm)]
     .map((r) => r[1].split('|').map((c) => c.trim()))
     .filter((cols) => cols.length >= 3 && cols[0] !== 'Date' && (cols[0] || cols[1]));
   const last = rows.length ? rows[rows.length - 1] : null;
@@ -66,19 +85,21 @@ function parsePillar(md) {
     .filter((r) => r[0])
     .slice(-4)
     .reverse();
+  const split = last ? splitHeadline(last[1]) : { headline: 'No data yet', detail: '' };
   return {
     role,
     objective,
     signal,
-    latest: last ? last[1] : 'No data yet',
+    headline: split.headline,
+    detail: split.detail,
     statusWord: status ? status.word : 'Not set',
     color: status ? status.color : '#71717a',
     history,
   };
 }
 
-function countInboxItems(md) {
-  return md
+function countInboxItems(mdText) {
+  return mdText
     .split('\n')
     .filter((l) => {
       const t = l.trim();
@@ -111,10 +132,10 @@ function deadlineWidget() {
     const label = days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Today' : `${days}d`;
     return `<div class="deadline ${urgent ? 'urgent' : ''}">
       <span class="deadline-days">${label}</span>
-      <span class="deadline-label">${escapeHtml(d.label)}</span>
+      <span class="deadline-label">${md(d.label)}</span>
     </div>`;
   }).join('');
-  return `<div class="panel deadlines"><h2>Coming Up</h2><div class="deadline-row">${items}</div></div>`;
+  return `<section class="panel deadlines"><h2>Coming up</h2><div class="deadline-row">${items}</div></section>`;
 }
 
 function historyList(history) {
@@ -122,7 +143,7 @@ function historyList(history) {
   return `<div class="stat-history">
     ${history
       .map(
-        (r) => `<div class="history-row"><span class="history-date">${escapeHtml(r[0] || '—')}</span><span class="history-text">${escapeHtml(r[1])}</span></div>`
+        (r) => `<div class="history-row"><span class="history-date">${md(r[0] || '—')}</span><span class="history-text">${md(r[1])}</span></div>`
       )
       .join('')}
   </div>`;
@@ -132,13 +153,14 @@ function pillarCard(name, p) {
   return `
     <div class="stat-card" style="--accent:${p.color}">
       <div class="stat-top">
-        <span class="stat-name">${escapeHtml(name)}</span>
-        <span class="pill" style="background:${p.color}1a;color:${p.color}">${escapeHtml(p.statusWord)}</span>
+        <span class="stat-name">${md(name)}</span>
+        <span class="pill" style="background:${p.color}1a;color:${p.color}">${md(p.statusWord)}</span>
       </div>
-      <p class="stat-value">${escapeHtml(p.latest)}</p>
-      <p class="stat-label">${escapeHtml(p.signal)}</p>
+      <p class="stat-label">${md(p.signal)}</p>
+      <p class="stat-value">${md(p.headline)}</p>
+      ${p.detail ? `<p class="stat-detail">${md(p.detail)}</p>` : ''}
       ${historyList(p.history)}
-      <p class="stat-objective">${escapeHtml(p.objective)}</p>
+      <p class="stat-objective">${md(p.objective)}</p>
     </div>`;
 }
 
@@ -147,7 +169,7 @@ function taskList(items) {
   return `<ul class="today-list">${items
     .map(
       (t) =>
-        `<li class="${t.done ? 'done' : ''}"><span class="check">${t.done ? '✓' : ''}</span>${escapeHtml(t.text)}</li>`
+        `<li class="${t.done ? 'done' : ''}"><span class="check">${t.done ? '✓' : ''}</span>${md(t.text)}</li>`
     )
     .join('')}</ul>`;
 }
@@ -157,10 +179,10 @@ const backlogSections = Object.entries(backlog)
     ([tag, items]) => `
     <div class="backlog-group">
       <div class="backlog-head">
-        <span class="tag">#${escapeHtml(tag)}</span>
+        <span class="tag">#${md(tag)}</span>
         <span class="count">${items.length}</span>
       </div>
-      ${items.length ? `<ul>${items.map((t) => `<li>${escapeHtml(t)}</li>`).join('')}</ul>` : '<p class="empty">Empty.</p>'}
+      ${items.length ? `<ul>${items.map((t) => `<li>${md(t)}</li>`).join('')}</ul>` : '<p class="empty">Empty.</p>'}
     </div>`
   )
   .join('');
@@ -194,9 +216,11 @@ const html = `<!doctype html>
     --border: #26262f;
     --text: #ffffff;
     --muted: #9ca3af;
+    --faint: #6b7280;
     --accent: #4f46e5;
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     margin: 0;
@@ -204,83 +228,89 @@ const html = `<!doctype html>
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     background-image: radial-gradient(var(--border) 1px, transparent 1px);
-    background-size: 22px 22px;
+    background-size: 24px 24px;
+    line-height: 1.5;
   }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 32px 20px 80px; }
+  strong { color: var(--text); font-weight: 700; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 96px; }
 
-  header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
   .brand { display: flex; flex-direction: column; }
   .brand .kicker {
-    display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+    display: inline-flex; align-items: center; gap: 7px; width: fit-content;
     font-size: 0.72rem; letter-spacing: 0.06em; color: var(--accent); font-weight: 600;
-    margin-bottom: 10px; background: #4f46e51a; border: 1px solid #4f46e540;
-    padding: 4px 12px; border-radius: 999px;
+    margin-bottom: 14px; background: #4f46e51a; border: 1px solid #4f46e540;
+    padding: 5px 13px 5px 11px; border-radius: 999px;
   }
-  .brand .kicker::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
-  h1 { font-family: 'Sora', -apple-system, sans-serif; font-weight: 700; font-size: 1.9rem; margin: 0; letter-spacing: -0.01em; }
-  .built { color: var(--muted); font-size: 0.78rem; }
+  .brand .kicker::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  h1 { font-family: 'Sora', -apple-system, sans-serif; font-weight: 700; font-size: 2rem; margin: 0; letter-spacing: -0.02em; }
+  .built { color: var(--faint); font-size: 0.78rem; padding-top: 4px; white-space: nowrap; }
 
   .banner {
     display: flex; align-items: center; gap: 10px;
-    padding: 12px 16px; border-radius: 12px; margin-bottom: 24px;
+    padding: 13px 18px; border-radius: 12px; margin-bottom: 28px;
     font-size: 0.88rem; font-weight: 500;
     border: 1px solid transparent;
   }
-  .banner.warn { background: #eab30818; border-color: #eab30840; color: #eab308; }
-  .banner.ok { background: #22c55e18; border-color: #22c55e40; color: #22c55e; }
+  .banner.warn { background: #eab30814; border-color: #eab30838; color: #eab308; }
+  .banner.ok { background: #22c55e14; border-color: #22c55e38; color: #22c55e; }
   .banner .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  section { margin-bottom: 20px; }
+  section:last-of-type { margin-bottom: 0; }
+
+  .deadline-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .deadline {
+    flex: 1; min-width: 190px;
+    border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 3px; background: var(--bg);
+  }
+  .deadline.urgent { border-color: #ef444460; background: #ef444412; }
+  .deadline-days { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 700; font-variant-numeric: proportional-nums; }
+  .deadline.urgent .deadline-days { color: #ef4444; }
+  .deadline-label { font-size: 0.78rem; color: var(--muted); }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
   .stat-card {
     position: relative;
     background: var(--bg-elevated);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px 20px 18px;
+    border-radius: 18px;
+    padding: 24px 24px 20px;
     overflow: hidden;
   }
   .stat-card::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
     background: var(--accent);
   }
-  .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
   .stat-name { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
-  .pill { font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.03em; }
-  .stat-value { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 700; margin: 0 0 2px; line-height: 1.3; }
-  .stat-label { font-size: 0.75rem; color: var(--muted); margin: 0 0 12px; }
-  .stat-objective { font-size: 0.82rem; color: var(--muted); margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--border); }
+  .pill { font-size: 0.68rem; font-weight: 700; padding: 4px 11px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .stat-label { font-size: 0.72rem; color: var(--faint); margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-value { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 700; font-variant-numeric: proportional-nums; margin: 0; line-height: 1.25; }
+  .stat-detail { font-size: 0.85rem; color: var(--muted); margin: 6px 0 0; line-height: 1.55; }
 
-  .stat-history { margin: 10px 0; padding: 10px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .history-row { display: flex; gap: 10px; font-size: 0.76rem; padding: 3px 0; color: var(--muted); }
-  .history-row:first-child { color: var(--text); font-weight: 600; }
-  .history-date { flex-shrink: 0; font-variant-numeric: tabular-nums; width: 74px; }
+  .stat-history { margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid var(--border); }
+  .history-row { display: flex; gap: 12px; font-size: 0.76rem; padding: 3px 0; color: var(--faint); }
+  .history-row:first-child { color: var(--muted); font-weight: 600; }
+  .history-date { flex-shrink: 0; font-variant-numeric: tabular-nums; width: 76px; }
   .history-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .stat-objective { font-size: 0.8rem; color: var(--faint); margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--border); }
 
   .panel {
     background: var(--bg-elevated);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
+    border-radius: 18px;
+    padding: 22px 24px;
   }
-  .panel h2 { font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700; margin: 0 0 14px; }
-  .empty { color: var(--muted); font-size: 0.85rem; font-style: italic; margin: 0; }
-
-  .deadline-row { display: flex; flex-wrap: wrap; gap: 12px; }
-  .deadline {
-    flex: 1; min-width: 180px;
-    border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;
-    display: flex; flex-direction: column; gap: 2px; background: var(--bg);
-  }
-  .deadline.urgent { border-color: #ef4444; background: #ef444412; }
-  .deadline-days { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; }
-  .deadline.urgent .deadline-days { color: #ef4444; }
-  .deadline-label { font-size: 0.78rem; color: var(--muted); }
+  .panel h2 { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; margin: 0 0 16px; }
+  .empty { color: var(--faint); font-size: 0.85rem; font-style: italic; margin: 0; }
 
   ul.today-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   ul.today-list li {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 0.92rem; padding: 9px 12px; border-radius: 10px; background: var(--bg);
+    display: flex; align-items: center; gap: 11px;
+    font-size: 0.92rem; padding: 11px 14px; border-radius: 10px; background: var(--bg);
     border: 1px solid var(--border);
   }
   ul.today-list li .check {
@@ -288,18 +318,18 @@ const html = `<!doctype html>
     display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0;
     color: var(--accent); border-color: var(--accent);
   }
-  ul.today-list li.done { color: var(--muted); text-decoration: line-through; }
+  ul.today-list li.done { color: var(--faint); text-decoration: line-through; }
 
-  .backlog-group { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .backlog-group { padding: 16px 0; border-bottom: 1px solid var(--border); }
   .backlog-group:last-child { border-bottom: none; padding-bottom: 0; }
   .backlog-group:first-child { padding-top: 0; }
-  .backlog-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .tag { font-size: 0.85rem; font-weight: 700; font-family: 'Sora', sans-serif; color: var(--accent); }
-  .count { font-size: 0.75rem; color: var(--muted); background: var(--bg); border: 1px solid var(--border); padding: 1px 9px; border-radius: 999px; }
-  .backlog-group ul { margin: 0; padding-left: 18px; }
-  .backlog-group li { font-size: 0.88rem; margin: 5px 0; }
+  .backlog-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .tag { font-size: 0.83rem; font-weight: 700; font-family: 'Sora', sans-serif; color: var(--accent); }
+  .count { font-size: 0.72rem; color: var(--faint); background: var(--bg); border: 1px solid var(--border); padding: 1px 9px; border-radius: 999px; font-variant-numeric: proportional-nums; }
+  .backlog-group ul { margin: 0; padding-left: 20px; }
+  .backlog-group li { font-size: 0.87rem; margin: 6px 0; color: var(--muted); line-height: 1.5; }
 
-  footer { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 24px; }
+  footer { text-align: center; color: var(--faint); font-size: 0.75rem; margin-top: 40px; }
 </style>
 </head>
 <body>
@@ -314,25 +344,25 @@ const html = `<!doctype html>
 
     <div class="banner ${inboxState}">
       <span class="dot"></span>
-      ${escapeHtml(inboxMessage)}
-    </div>
-
-    <div class="stat-grid">
-      ${pillarCard('Finance', finance)}
-      ${pillarCard('Revenue / Ops', revenueOps)}
+      ${md(inboxMessage)}
     </div>
 
     ${deadlineWidget()}
 
-    <div class="panel">
+    <section class="stat-grid">
+      ${pillarCard('Finance', finance)}
+      ${pillarCard('Revenue / Ops', revenueOps)}
+    </section>
+
+    <section class="panel">
       <h2>Today</h2>
       ${taskList(today)}
-    </div>
+    </section>
 
-    <div class="panel">
+    <section class="panel">
       <h2>Backlog</h2>
       ${backlogSections || '<p class="empty">Nothing here.</p>'}
-    </div>
+    </section>
 
     <footer>Rebuilds automatically on every push to the Life-OS repo.</footer>
   </div>
