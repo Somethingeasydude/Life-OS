@@ -49,12 +49,24 @@ Same bar Claw holds itself to, confirmed by Robert:
 
 - Never build, deploy, or push infrastructure changes without explicit
   go-ahead for that specific action.
-- Never touch anything outside this repo/project without being asked —
-  specifically Ovis Canem, Hope Baptist's site, Stripe, Notion, Gmail,
-  Facebook/LinkedIn, Kit, or the Telegram bot. Those are Claw's/other
-  agents' domain unless Robert explicitly hands off a specific one.
-- If given a Vercel token or any other credential, scope actions to the
-  `life-os` project only.
+- **Updated 2026-08-18:** RAM confirmed he manages all his projects
+  directly and wants edit access across all of them, not just
+  `life-os` — this is explicitly why he moved off Claw. So: Vercel
+  projects RAM manages (Hope Baptist's site, demos, etc.) are in scope
+  once the Vercel connector is actually confirmed working, not just
+  policy-approved. **Ovis Canem is the one exception still pending
+  confirmation** — Jared has a partnership stake (verbal 25%
+  profit-share, owns vision/brand), so before touching that one
+  specifically, confirm with RAM whether Jared should be looped in
+  first. Everything else outside this repo (Stripe, Notion, Gmail,
+  Facebook/LinkedIn, Kit, the Telegram bot) still needs an explicit
+  per-instance go-ahead — this update is about project/deploy access,
+  not a blanket removal of the ask-first rule.
+- Still: never build, deploy, or push changes to any project — including
+  ones now in scope — without explicit go-ahead for that specific
+  action. Broader access is not standing permission to act unprompted.
+- If given a Vercel token or any other credential, note which
+  project(s) it's actually scoped to before acting.
 - **Ask, don't guess.** RAM confirmed 2026-08-18: when intent is unclear,
   ask a clarifying question rather than assume — every session, not just
   this one.

@@ -49,13 +49,34 @@ system yet — send it back to the inbox or cut it.
 - [ ] Ovis Canem handoff — still owed: plain-language deploy guide for
       Jared, Jared's own sandbox Vercel project, an IP-ownership doc,
       and connecting both Claudes to the Build Board
+- [ ] Whitaker Agency / Liberty National — follow up on the Worksite
+      Pipeline growth-infrastructure pitch (45 Cobb County businesses
+      already mapped)
+- [ ] Whispering Woodturner (Uncle Joe) — get the discovery call
+      scheduled; site is already built locally, just needs the
+      conversation to move to delivery
 - [ ] Systemize Claw's lead recon into a repeatable process
+
+### #growth
+
+Growth isn't a built pillar yet (Phase 1 is Finance + Revenue/Ops only),
+but logging these so they aren't lost — confirmed real, need more detail
+from RAM before they can become concrete tasks.
+
+- [ ] "Conscious Knowledge" brand — confirmed real, no detail captured
+      yet on what this actually is
+- [ ] Family land-development vision — confirmed real, no detail
+      captured yet
 
 ### #admin
 
 Admin isn't a built pillar yet (Phase 1 is Finance + Revenue/Ops only),
 but this can't wait for that — logging it here so it isn't lost.
 
+- [ ] TCPA/telemarketer complaint playbook — confirmed real, no detail
+      captured yet. Likely connects to the existing debt-collection/FDCPA
+      work already logged in Pillars/Finance.md (Aldous & Associates,
+      CFPB complaint) — worth checking if it's the same thread or separate.
 - [ ] **Housing — most urgent.** Mom + her boyfriend Ryan occupying the
       1BR as overstayed guests; police already called once; written
       notice ignored; a false accusation was made against Ram. As of

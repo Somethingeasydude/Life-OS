@@ -36,5 +36,17 @@ RAM Strategic Systems LLC formed Dec 2025.
 - **Builder Intelligence Dashboard** (prior TNDD role) — Puppeteer permit
   scraper, 166 leads loaded, 13 passed to sales. Kept as proof-of-work,
   not active revenue.
+- **Whitaker Agency / Liberty National** (Mikala Whitaker + Caelyn) —
+  confirmed active pursuit as of 2026-08-18. Potential engagement to
+  build agency growth infrastructure — Worksite Pipeline concept, ~45
+  Cobb County businesses / 758 W-2 employees already mapped. RAM is
+  pre-license, 1099, insurance income not yet flowing.
+- **Whispering Woodturner** (Uncle Joe, woodturning e-commerce, Buford
+  area) — confirmed active as of 2026-08-18. Built locally: React 18 +
+  TypeScript, Express.js, PostgreSQL + Drizzle ORM, PayPal payments,
+  Tailwind + Shadcn/UI. Product catalog, cart, admin dashboard, blog,
+  contact/newsletter all built. Not yet confirmed deployed publicly.
+  Proposed delivery: $500–1,500 setup + $200–400/mo management, pending
+  a discovery call.
 - Claw was running lead recon; turning that into a repeatable process is
   on the backlog (see Tasks.md).
