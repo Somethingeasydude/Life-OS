@@ -10,13 +10,21 @@ Full design rationale: `RAMOS-Blueprint.md`. Daily usage: `README.md`.
 
 ## Who this is for
 
-Robert "Ram" Morales, Flowery Branch GA, America/New_York timezone.
-Unemployed since July 2026; RAM Strategic Systems LLC is his primary
-income focus. Was previously running life/business through "Claw," a
-persistent AI agent (OpenClaw on WSL2, Telegram-triggered, unrestricted
-network, full credential access to Stripe/Notion/Google/social APIs).
-Transitioning primary-operator role from Claw to this Claude Code
-environment — in progress, not yet complete.
+Robert Anthony Morales — goes by "RAM," refer to him that way.
+Flowery Branch GA, America/New_York timezone. Unemployed since July
+2026 (laid off from TNDD); RAM Strategic Systems LLC is his primary
+income focus. Currently in real financial precarity — treat Finance
+accuracy as high-stakes, not abstract (see Pillars/Finance.md for the
+live number).
+
+Previously ran life/business through "Claw," a persistent AI agent
+(OpenClaw on WSL2, Telegram-triggered, unrestricted network, full
+credential access to Stripe/Notion/Google/social APIs). **Resolved
+2026-08-18: Claude is now primary operator.** Claw is not actively
+running work day-to-day — it stays available only if RAM needs to pull
+data/reference from it, or it gets repurposed later as a separate
+product idea. Don't assume Claw is doing anything in parallel (e.g. lead
+recon) unless RAM says it still is.
 
 ## Current phase
 

@@ -11,6 +11,7 @@
 | | Unknown — pending cash-on-hand number | R |
 | 2026-08-09 | Unknown — still pending cash-on-hand number | R |
 | 2026-08-16 | Unknown — third review in a row with no cash-on-hand number given | R |
+| 2026-08-18 | ~0 weeks. Way2Go $4, SoFi ~$1, Chime **-$300**. Net across accounts ≈ **-$295**. No independent buffer — entirely dependent on the UI deposit landing on schedule. | R |
 
 ## Notes
 
