@@ -16,9 +16,34 @@
 
 Known inputs so far (fill in the rest, then compute the first real row):
 
-- Income: UI ~$365/week (~$1,460/mo), plus LongHorn tips as margin
-- Fixed costs: rent ~$1,005/mo, Georgia Power (amount TBD), other living costs (TBD)
-- Still needed: total cash on hand across all accounts (SoFi, Chime, etc.)
+- **UI (unemployment) benefit:** $365/week, state max. Benefit year
+  07/12/2026–07/10/2027, max ~$4,745 total (~13–14 weeks). Paid to a
+  Way2Go prepaid card.
+- **GA UI earnings rule:** first $50/week from LongHorn is disregarded;
+  every dollar above that is deducted dollar-for-dollar from the
+  benefit. Practical breakeven is ~$415/wk in LongHorn wages — beyond
+  that it's just swapping benefit for wages, not adding income.
+- **Rent:** ~$1,005/month all-in, Park Hill Unit E-06, lease
+  07/22/2026–07/21/2027. No security deposit. Flagged clauses: $2,500
+  early-termination fee, $250/mo increase if 60-day non-renewal notice
+  is missed, $600 bed-bug liability clause.
+- **Georgia Power:** $30 establishment fee, no deposit.
+- **Prior income (reference only):** TNDD take-home was $3,300/mo
+  before the 07/14/2026 layoff — not current income.
+- **Accounts:** SoFi Savings = move-fund vault. Chime Checking = paycheck
+  intake, **currently negative balance**, recurring MyPay/cash-advance
+  pattern flagged as a problem loop. Chase Business = RAM revenue
+  account (was showing inactive). USAA = inactive. Stripe payouts route
+  to SoFi. Advice on record: keep incoming funds on Way2Go, off Chime.
+- **Debts:** Aldous & Associates collection, $78 (Workout Anytime gym
+  membership, disputed). Experian balance from a closed Verizon account.
+- **Credit (April 2026, stale — confirm current):** TransUnion 639
+  VantageScore, Experian 538 FICO.
+- **Insurance (Whitaker Agency/Liberty National):** 1099 commission-only,
+  no earnings yet, pre-license.
+- **Car insurance:** ~$180/mo estimate, a payment was due ~Aug 18.
+- Still needed: total cash on hand across all accounts — this is the one
+  number that turns the health signal from "unknown" into real.
 - Keep RAM's money and personal money separable — this OS is an operating
   *frame*, not a literal merge of bank accounts. Confirm with an
   accountant before treating them as one pool.
