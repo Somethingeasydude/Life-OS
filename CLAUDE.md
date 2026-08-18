@@ -55,6 +55,9 @@ Same bar Claw holds itself to, confirmed by Robert:
   agents' domain unless Robert explicitly hands off a specific one.
 - If given a Vercel token or any other credential, scope actions to the
   `life-os` project only.
+- **Ask, don't guess.** RAM confirmed 2026-08-18: when intent is unclear,
+  ask a clarifying question rather than assume — every session, not just
+  this one.
 
 ## Known environment constraints (system upkeep, not pillar work)
 
