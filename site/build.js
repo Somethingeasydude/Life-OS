@@ -81,9 +81,11 @@ function parsePillar(mdText) {
     .filter((cols) => cols.length >= 3 && cols[0] !== 'Date' && (cols[0] || cols[1]));
   const last = rows.length ? rows[rows.length - 1] : null;
   const status = last ? STATUS[last[2]] : null;
+  // Prior entries only -- the current one is already shown as headline+detail above.
   const history = rows
     .filter((r) => r[0])
-    .slice(-4)
+    .slice(0, -1)
+    .slice(-3)
     .reverse();
   const split = last ? splitHeadline(last[1]) : { headline: 'No data yet', detail: '' };
   return {
@@ -125,17 +127,38 @@ function daysUntil(dateStr) {
   return Math.ceil((target - now) / (1000 * 60 * 60 * 24));
 }
 
-function deadlineWidget() {
-  const items = DEADLINES.map((d) => {
-    const days = daysUntil(d.date);
-    const urgent = days <= 3;
-    const label = days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Today' : `${days}d`;
-    return `<div class="deadline ${urgent ? 'urgent' : ''}">
-      <span class="deadline-days">${label}</span>
-      <span class="deadline-label">${md(d.label)}</span>
-    </div>`;
-  }).join('');
-  return `<section class="panel deadlines"><h2>Coming up</h2><div class="deadline-row">${items}</div></section>`;
+function dayLabel(days) {
+  return days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Today' : `${days}d`;
+}
+
+// Urgent deadlines (<=3 days) get a dominant full-width alert at the very
+// top. Everything else stays a quiet one-line strip -- not a card, so it
+// doesn't compete visually with the pillars, which are the actual point.
+function deadlineSection() {
+  const parsed = DEADLINES.map((d) => ({ ...d, days: daysUntil(d.date) }));
+  const urgent = parsed.filter((d) => d.days <= 3);
+  const quiet = parsed.filter((d) => d.days > 3);
+
+  const alert = urgent.length
+    ? `<section class="alert-zone">
+        ${urgent
+          .map(
+            (d) => `<div class="alert-banner">
+              <span class="alert-days">${dayLabel(d.days)}</span>
+              <span class="alert-label">${md(d.label)}</span>
+            </div>`
+          )
+          .join('')}
+      </section>`
+    : '';
+
+  const quietStrip = quiet.length
+    ? `<div class="quiet-deadlines">${quiet
+        .map((d) => `<span class="quiet-item"><strong>${dayLabel(d.days)}</strong> ${md(d.label)}</span>`)
+        .join('<span class="quiet-sep">·</span>')}</div>`
+    : '';
+
+  return alert + quietStrip;
 }
 
 function historyList(history) {
@@ -283,28 +306,43 @@ const html = `<!doctype html>
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
     background: var(--accent);
   }
-  .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .stat-name { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .stat-name { font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); }
   .pill { font-size: 0.68rem; font-weight: 700; padding: 4px 11px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.03em; }
-  .stat-label { font-size: 0.72rem; color: var(--faint); margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .stat-value { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 700; font-variant-numeric: proportional-nums; margin: 0; line-height: 1.25; }
-  .stat-detail { font-size: 0.85rem; color: var(--muted); margin: 6px 0 0; line-height: 1.55; }
+  .stat-label { font-size: 0.72rem; color: var(--faint); margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-value { font-family: 'Sora', sans-serif; font-size: 2.3rem; font-weight: 700; font-variant-numeric: proportional-nums; margin: 0; line-height: 1.15; letter-spacing: -0.01em; }
+  .stat-detail { font-size: 0.88rem; color: var(--muted); margin: 10px 0 0; line-height: 1.6; }
 
-  .stat-history { margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid var(--border); }
-  .history-row { display: flex; gap: 12px; font-size: 0.76rem; padding: 3px 0; color: var(--faint); }
-  .history-row:first-child { color: var(--muted); font-weight: 600; }
-  .history-date { flex-shrink: 0; font-variant-numeric: tabular-nums; width: 76px; }
+  .stat-history { margin: 18px 0 0; padding: 16px 0 0; border-top: 1px solid var(--border); }
+  .history-row { display: flex; gap: 14px; font-size: 0.78rem; padding: 3px 0; color: var(--faint); }
+  .history-date { flex-shrink: 0; font-variant-numeric: tabular-nums; width: 82px; }
   .history-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .stat-objective { font-size: 0.8rem; color: var(--faint); margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--border); }
+  .stat-objective { font-size: 0.82rem; color: var(--faint); margin: 16px 0 0; padding-top: 16px; border-top: 1px solid var(--border); }
+
+  .alert-zone { margin-bottom: 16px; }
+  .alert-banner {
+    display: flex; align-items: baseline; gap: 14px;
+    background: #ef444414; border: 1px solid #ef444460; border-radius: 14px;
+    padding: 16px 20px; margin-bottom: 10px;
+  }
+  .alert-days { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; color: #ef4444; flex-shrink: 0; }
+  .alert-label { font-size: 0.92rem; color: var(--text); font-weight: 500; }
+
+  .quiet-deadlines {
+    font-size: 0.78rem; color: var(--faint); margin-bottom: 24px;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .quiet-deadlines strong { color: var(--muted); font-weight: 700; }
+  .quiet-sep { color: var(--border); }
 
   .panel {
     background: var(--bg-elevated);
     border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 22px 24px;
+    border-radius: 16px;
+    padding: 18px 22px;
   }
-  .panel h2 { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; margin: 0 0 16px; }
+  .panel h2 { font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 700; margin: 0 0 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
   .empty { color: var(--faint); font-size: 0.85rem; font-style: italic; margin: 0; }
 
   ul.today-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
@@ -327,7 +365,7 @@ const html = `<!doctype html>
   .tag { font-size: 0.83rem; font-weight: 700; font-family: 'Sora', sans-serif; color: var(--accent); }
   .count { font-size: 0.72rem; color: var(--faint); background: var(--bg); border: 1px solid var(--border); padding: 1px 9px; border-radius: 999px; font-variant-numeric: proportional-nums; }
   .backlog-group ul { margin: 0; padding-left: 20px; }
-  .backlog-group li { font-size: 0.87rem; margin: 6px 0; color: var(--muted); line-height: 1.5; }
+  .backlog-group li { font-size: 0.84rem; margin: 6px 0; color: var(--faint); line-height: 1.5; }
 
   footer { text-align: center; color: var(--faint); font-size: 0.75rem; margin-top: 40px; }
 </style>
@@ -342,12 +380,12 @@ const html = `<!doctype html>
       <span class="built">Updated ${escapeHtml(builtAt)} ET</span>
     </header>
 
+    ${deadlineSection()}
+
     <div class="banner ${inboxState}">
       <span class="dot"></span>
       ${md(inboxMessage)}
     </div>
-
-    ${deadlineWidget()}
 
     <section class="stat-grid">
       ${pillarCard('Finance', finance)}
