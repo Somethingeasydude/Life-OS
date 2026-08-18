@@ -5,4 +5,4 @@ just capture. Under 10 seconds. Clear this to empty during daily Clarify
 (turn each line into a task in `Tasks.md`, a note in a `Pillars/` file, or
 delete it).
 
--
+- test capture — proving this session writes to the repo, no connector needed (safe to delete)
