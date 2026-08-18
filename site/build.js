@@ -48,9 +48,9 @@ function parseBacklog(md) {
 }
 
 const STATUS = {
-  G: { word: 'On track', color: '#22c55e' },
-  Y: { word: 'Watch', color: '#eab308' },
-  R: { word: 'At risk', color: '#ef4444' },
+  G: { word: 'On track', color: '#2F6F4E' },
+  Y: { word: 'Watch', color: '#B8860B' },
+  R: { word: 'At risk', color: '#8B3A3A' },
 };
 
 function parsePillar(md) {
@@ -59,16 +59,21 @@ function parsePillar(md) {
   const signal = (md.match(/\*\*Health signal:\*\*\s*(.*)/) || [])[1] || '';
   const rows = [...md.matchAll(/^\|(?!-{3,})(.+)\|$/gm)]
     .map((r) => r[1].split('|').map((c) => c.trim()))
-    .filter((cols) => cols.length >= 3 && cols[0] !== 'Date');
+    .filter((cols) => cols.length >= 3 && cols[0] !== 'Date' && (cols[0] || cols[1]));
   const last = rows.length ? rows[rows.length - 1] : null;
   const status = last ? STATUS[last[2]] : null;
+  const history = rows
+    .filter((r) => r[0])
+    .slice(-4)
+    .reverse();
   return {
     role,
     objective,
     signal,
     latest: last ? last[1] : 'No data yet',
     statusWord: status ? status.word : 'Not set',
-    color: status ? status.color : '#71717a',
+    color: status ? status.color : '#7a7266',
+    history,
   };
 }
 
@@ -88,15 +93,51 @@ const finance = parsePillar(read('Pillars/Finance.md'));
 const revenueOps = parsePillar(read('Pillars/Revenue-Ops.md'));
 const inboxCount = countInboxItems(read('Inbox.md'));
 
+const DEADLINES = [
+  { label: 'Housing decision (mom + Ryan to leave)', date: '2026-08-24' },
+  { label: 'Sept rent due', date: '2026-09-01' },
+];
+
+function daysUntil(dateStr) {
+  const now = new Date();
+  const target = new Date(dateStr + 'T00:00:00');
+  return Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+}
+
+function deadlineWidget() {
+  const items = DEADLINES.map((d) => {
+    const days = daysUntil(d.date);
+    const urgent = days <= 3;
+    const label = days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Today' : `${days}d`;
+    return `<div class="deadline ${urgent ? 'urgent' : ''}">
+      <span class="deadline-days">${label}</span>
+      <span class="deadline-label">${escapeHtml(d.label)}</span>
+    </div>`;
+  }).join('');
+  return `<div class="panel deadlines"><h2>Coming Up</h2><div class="deadline-row">${items}</div></div>`;
+}
+
+function historyList(history) {
+  if (!history.length) return '';
+  return `<div class="stat-history">
+    ${history
+      .map(
+        (r) => `<div class="history-row"><span class="history-date">${escapeHtml(r[0] || '—')}</span><span class="history-text">${escapeHtml(r[1])}</span></div>`
+      )
+      .join('')}
+  </div>`;
+}
+
 function pillarCard(name, p) {
   return `
     <div class="stat-card" style="--accent:${p.color}">
       <div class="stat-top">
         <span class="stat-name">${escapeHtml(name)}</span>
-        <span class="pill" style="background:${p.color}22;color:${p.color}">${escapeHtml(p.statusWord)}</span>
+        <span class="pill" style="background:${p.color}1a;color:${p.color}">${escapeHtml(p.statusWord)}</span>
       </div>
       <p class="stat-value">${escapeHtml(p.latest)}</p>
       <p class="stat-label">${escapeHtml(p.signal)}</p>
+      ${historyList(p.history)}
       <p class="stat-objective">${escapeHtml(p.objective)}</p>
     </div>`;
 }
@@ -142,58 +183,62 @@ const html = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RAM-OS Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    color-scheme: dark light;
-    --bg: #0a0b0d;
-    --bg-elevated: #131418;
-    --border: #212329;
-    --text: #edeef0;
-    --muted: #8b8f98;
-    --accent: #5eead4;
+    color-scheme: light dark;
+    --bg: #FAF8F4;
+    --bg-elevated: #FFFFFF;
+    --border: #E4DCC8;
+    --text: #1C2B3A;
+    --muted: #6b7688;
+    --accent: #B8942A;
   }
-  @media (prefers-color-scheme: light) {
+  @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #f4f4f2;
-      --bg-elevated: #ffffff;
-      --border: #e4e4e1;
-      --text: #16171a;
-      --muted: #71717a;
+      --bg: #1C2B3A;
+      --bg-elevated: #243449;
+      --border: #34455c;
+      --text: #FAF8F4;
+      --muted: #a9b6c4;
+      --accent: #D4AF4B;
     }
   }
   * { box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    font-family: 'Lato', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     margin: 0;
     background: var(--bg);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 32px 20px 80px; }
 
   header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
   .brand { display: flex; flex-direction: column; }
-  .brand .kicker { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
-  h1 { font-size: 1.6rem; margin: 0; letter-spacing: -0.01em; }
+  .brand .kicker { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+  h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 2.1rem; margin: 0; letter-spacing: 0.01em; }
   .built { color: var(--muted); font-size: 0.78rem; }
 
   .banner {
     display: flex; align-items: center; gap: 10px;
-    padding: 12px 16px; border-radius: 12px; margin-bottom: 24px;
-    font-size: 0.88rem; font-weight: 500;
+    padding: 12px 16px; border-radius: 4px; margin-bottom: 24px;
+    font-size: 0.88rem; font-weight: 600;
     border: 1px solid transparent;
   }
-  .banner.warn { background: #eab30818; border-color: #eab30840; color: #eab308; }
-  .banner.ok { background: #22c55e18; border-color: #22c55e40; color: #22c55e; }
+  .banner.warn { background: #B8860B18; border-color: #B8860B40; color: #B8860B; }
+  .banner.ok { background: #2F6F4E18; border-color: #2F6F4E40; color: #2F6F4E; }
   .banner .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 20px; }
   .stat-card {
     position: relative;
     background: var(--bg-elevated);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 18px 16px;
+    border-radius: 4px;
+    padding: 20px 20px 18px;
     overflow: hidden;
   }
   .stat-card::before {
@@ -201,43 +246,60 @@ const html = `<!doctype html>
     background: var(--accent);
   }
   .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .stat-name { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .pill { font-size: 0.72rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
-  .stat-value { font-size: 1.15rem; font-weight: 600; margin: 0 0 2px; line-height: 1.3; }
-  .stat-label { font-size: 0.75rem; color: var(--muted); margin: 0 0 10px; }
-  .stat-objective { font-size: 0.82rem; color: var(--muted); margin: 0; padding-top: 10px; border-top: 1px solid var(--border); }
+  .stat-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.05rem; font-weight: 700; color: var(--text); letter-spacing: 0.02em; }
+  .pill { font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-value { font-size: 1.05rem; font-weight: 600; margin: 0 0 2px; line-height: 1.4; }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-objective { font-size: 0.82rem; color: var(--muted); margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--border); font-style: italic; }
+
+  .stat-history { margin: 10px 0; padding: 10px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .history-row { display: flex; gap: 10px; font-size: 0.76rem; padding: 3px 0; color: var(--muted); }
+  .history-row:first-child { color: var(--text); font-weight: 600; }
+  .history-date { flex-shrink: 0; font-variant-numeric: tabular-nums; width: 74px; }
+  .history-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   .panel {
     background: var(--bg-elevated);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 20px;
+    border-radius: 4px;
+    padding: 20px 22px;
     margin-bottom: 16px;
   }
-  .panel h2 { font-size: 0.95rem; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .panel h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.2rem; font-weight: 700; margin: 0 0 14px; }
   .empty { color: var(--muted); font-size: 0.85rem; font-style: italic; margin: 0; }
+
+  .deadline-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .deadline {
+    flex: 1; min-width: 180px;
+    border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .deadline.urgent { border-color: #8B3A3A; background: #8B3A3A12; }
+  .deadline-days { font-size: 1.3rem; font-weight: 700; font-family: 'Cormorant Garamond', Georgia, serif; }
+  .deadline.urgent .deadline-days { color: #8B3A3A; }
+  .deadline-label { font-size: 0.78rem; color: var(--muted); }
 
   ul.today-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   ul.today-list li {
     display: flex; align-items: center; gap: 10px;
-    font-size: 0.92rem; padding: 8px 10px; border-radius: 8px; background: var(--bg);
+    font-size: 0.92rem; padding: 9px 12px; border-radius: 3px; background: var(--bg);
     border: 1px solid var(--border);
   }
   ul.today-list li .check {
-    width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--muted);
+    width: 18px; height: 18px; border-radius: 3px; border: 1px solid var(--muted);
     display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0;
     color: var(--accent); border-color: var(--accent);
   }
   ul.today-list li.done { color: var(--muted); text-decoration: line-through; }
 
-  .backlog-group { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .backlog-group { padding: 14px 0; border-bottom: 1px solid var(--border); }
   .backlog-group:last-child { border-bottom: none; padding-bottom: 0; }
   .backlog-group:first-child { padding-top: 0; }
-  .backlog-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-  .tag { font-size: 0.85rem; font-weight: 600; font-family: ui-monospace, Menlo, monospace; color: var(--accent); }
-  .count { font-size: 0.75rem; color: var(--muted); background: var(--bg); border: 1px solid var(--border); padding: 1px 8px; border-radius: 999px; }
+  .backlog-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .tag { font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+  .count { font-size: 0.75rem; color: var(--muted); background: var(--bg); border: 1px solid var(--border); padding: 1px 9px; border-radius: 3px; }
   .backlog-group ul { margin: 0; padding-left: 18px; }
-  .backlog-group li { font-size: 0.88rem; margin: 4px 0; }
+  .backlog-group li { font-size: 0.88rem; margin: 5px 0; }
 
   footer { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 24px; }
 </style>
@@ -261,6 +323,8 @@ const html = `<!doctype html>
       ${pillarCard('Finance', finance)}
       ${pillarCard('Revenue / Ops', revenueOps)}
     </div>
+
+    ${deadlineWidget()}
 
     <div class="panel">
       <h2>Today</h2>

@@ -79,6 +79,12 @@ Same bar Claw holds itself to, confirmed by Robert:
   regenerate the token with Contents set to Read-and-write, reauthorize
   the connector. Not urgent — this session already writes to the repo
   fine, so capture isn't blocked, just not yet available from the Project.
+- Dashboard is live at a Vercel-assigned URL under the correct account
+  (`ramllcmanagement-5388's projects`) — deliberately parked on the
+  default `.vercel.app` domain for now. RAM wants a custom domain under
+  `ram-strategicsystems.com` eventually; deferred until he picks the
+  subdomain and confirms where DNS is managed (likely Cloudflare, same
+  as Hope Baptist's site, but not confirmed for this domain specifically).
 
 This runs in a sandboxed Claude Code Remote container: outbound network
 is policy-restricted (confirmed blocked: `api.vercel.com`), and the
