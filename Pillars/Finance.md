@@ -29,7 +29,8 @@ Known inputs so far (fill in the rest, then compute the first real row):
   07/22/2026–07/21/2027. No security deposit. Flagged clauses: $2,500
   early-termination fee, $250/mo increase if 60-day non-renewal notice
   is missed, $600 bed-bug liability clause.
-- **Georgia Power:** $30 establishment fee, no deposit.
+- **Georgia Power:** $30 establishment fee, no deposit. Recurring bill
+  ~$70/mo — next due 2026-09-15.
 - **Prior income (reference only):** TNDD take-home was $3,300/mo
   before the 07/14/2026 layoff — not current income.
 - **Accounts:** SoFi Savings = move-fund vault. Chime Checking = paycheck
@@ -43,7 +44,8 @@ Known inputs so far (fill in the rest, then compute the first real row):
   VantageScore, Experian 538 FICO.
 - **Insurance (Whitaker Agency/Liberty National):** 1099 commission-only,
   no earnings yet, pre-license.
-- **Car insurance:** ~$180/mo estimate, a payment was due ~Aug 18.
+- **Car insurance:** $170/mo confirmed (paid from Way2Go), recurring due
+  the 18th of every month. Next due 2026-09-18.
 - Still needed: total cash on hand across all accounts — this is the one
   number that turns the health signal from "unknown" into real.
 - Keep RAM's money and personal money separable — this OS is an operating
