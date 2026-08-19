@@ -63,6 +63,8 @@ from RAM before they can become concrete tasks.
       yet on what this actually is
 - [ ] Family land-development vision — confirmed real, no detail
       captured yet
+- [ ] Update LinkedIn profile to reflect RAM + RAM Strategic Systems —
+      current headline/positioning unverified, likely stale
 
 ### #admin
 
