@@ -85,6 +85,12 @@ Same bar Claw holds itself to, confirmed by Robert:
   `ram-strategicsystems.com` eventually; deferred until he picks the
   subdomain and confirms where DNS is managed (likely Cloudflare, same
   as Hope Baptist's site, but not confirmed for this domain specifically).
+- **Paused 2026-08-18: dashboard layout still isn't right** — RAM said
+  it "doesn't seem structured and doesn't get to the point" even after
+  a branding correction and a hierarchy pass. Deliberately parked, not
+  abandoned — he explicitly chose to stop iterating on it and work the
+  actual task backlog instead. Don't pick this back up unprompted; wait
+  for RAM to raise it again.
 
 This runs in a sandboxed Claude Code Remote container: outbound network
 is policy-restricted (confirmed blocked: `api.vercel.com`), and the
