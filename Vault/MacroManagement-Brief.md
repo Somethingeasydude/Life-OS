@@ -32,10 +32,20 @@ the client doesn't have yet — do not commit to it for v1.
 ## Architecture: build the differentiated piece, rent the commodity piece
 
 - **Custom-built by RAM (IP):** the calculator + branded front door.
-- **Rented:** ordering, subscriptions, Stripe billing, labels, delivery
-  reports, SMS — on a purpose-built platform (Sprwt, Bottle, GoPrep,
-  KitchenFuel candidates).
+- **Rented:** ordering, subscriptions, labels, delivery reports — on a
+  purpose-built platform (Sprwt, Bottle, GoPrep, KitchenFuel candidates).
 - **RAM = the glue:** connects calculator output to checkout.
+
+**Correction, 2026-08-19 — RAM already told the client he'll handle
+this personally:** Stripe linking and SMS wiring are RAM's scope, not
+rented/hands-off as originally recommended. This is a real deviation
+from the brief's own stated rationale ("no custom payment/SMS
+liability" was explicitly why renting was recommended) — worth RAM
+clarifying exactly what "linking Stripe" and "SMS wiring" means in
+practice: configuring the chosen platform's native Stripe/Twilio
+integration (low liability, still mostly "glue") versus writing custom
+code directly against the Stripe/Twilio APIs (real payment/compliance
+liability, a materially bigger scope). Not yet resolved which one this is.
 
 ## Regulatory landmine — raise FIRST, before any build
 
