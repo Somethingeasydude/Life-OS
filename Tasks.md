@@ -5,9 +5,9 @@
 Pull ≤ 3 from the backlog below. Work from this list only — never from
 the inbox, never from the full backlog.
 
-- [ ]
-- [ ]
-- [ ]
+- [ ] MacroManagement.Co — get a verbal yes on build fee + retainer, lock specs
+- [ ] Ovis Canem handoff — deploy guide, sandbox project, IP-ownership doc
+- [ ] LongHorn training, 4:30pm today
 
 ## Backlog
 
@@ -18,15 +18,11 @@ system yet — send it back to the inbox or cut it.
 
 - [x] Get total cash on hand across all accounts — done 2026-08-18: Way2Go
       $4, SoFi ~$1, Chime -$300. See Pillars/Finance.md.
-- [ ] **UI weekly benefit deposit — expected to land Aug 18 or 19.**
-      Car insurance and other bills are waiting on this landing; there's
-      no other buffer right now.
-- [ ] LongHorn I-9/SSA issue blocking pay — needed for Sept 1 rent.
-      Either get an in-person SSA receipt (Gainesville office, 2565
-      Thompson Bridge Rd) or confirm GA license + certified birth
-      certificate suffices. Text to GM Danielle was drafted — send it.
-- [ ] Car insurance payment ~$180, was due ~Aug 18 — likely still unpaid,
-      waiting on the UI deposit to land
+- [x] UI weekly benefit deposit — landed 2026-08-19, $360
+- [x] LongHorn I-9/SSA issue — confirmed via text to GM Danielle, back
+      on schedule, training set for 2026-08-19 at 4:30pm
+- [x] Car insurance payment — paid 2026-08-19, $170 (actual, vs. ~$180
+      estimated)
 - [ ] Confirm TNDD wage-omission appeal status — deadline was 08/05/2026,
       still unconfirmed whether it was handled or lapsed (TNDD = former
       employer, the BD Director role that was dissolved)
@@ -73,6 +69,11 @@ from RAM before they can become concrete tasks.
 Admin isn't a built pillar yet (Phase 1 is Finance + Revenue/Ops only),
 but this can't wait for that — logging it here so it isn't lost.
 
+- [ ] Clear phone storage
+- [ ] Fix the life-os dashboard UI structure — paused 2026-08-18, RAM said
+      it "doesn't seem structured and doesn't get to the point" even after
+      a branding correction and a hierarchy pass. Revisit deliberately,
+      not as a side quest during other work. See CLAUDE.md for full history.
 - [ ] TCPA/telemarketer complaint playbook — confirmed real, no detail
       captured yet. Likely connects to the existing debt-collection/FDCPA
       work already logged in Pillars/Finance.md (Aldous & Associates,
