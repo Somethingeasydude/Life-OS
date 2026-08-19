@@ -67,6 +67,13 @@ Same bar Claw holds itself to, confirmed by Robert:
   action. Broader access is not standing permission to act unprompted.
 - If given a Vercel token or any other credential, note which
   project(s) it's actually scoped to before acting.
+- **Client engagement rule (added 2026-08-19, from the MacroManagement
+  brief):** RAM has a documented pattern of delivering founder-level
+  value (architecture, strategy, brand work) on a verbal understanding
+  and getting under-compensated for it — this already happened once on
+  Ovis Canem. Any future client engagement should push toward a written,
+  signed agreement before real build work starts, not just a friendly
+  verbal yes. Flag it if a session sees this pattern recurring.
 - **Ask, don't guess.** RAM confirmed 2026-08-18: when intent is unclear,
   ask a clarifying question rather than assume — every session, not just
   this one.

@@ -5,7 +5,8 @@
 Pull ≤ 3 from the backlog below. Work from this list only — never from
 the inbox, never from the full backlog.
 
-- [ ] MacroManagement.Co — get a verbal yes on build fee + retainer, lock specs
+- [ ] MacroManagement.Co — raise the GA commercial-kitchen requirement
+      with the client first (step 1 of the staged plan)
 - [ ] Ovis Canem handoff — deploy guide, sandbox project, IP-ownership doc
 - [ ] LongHorn training, 4:30pm today
 
@@ -38,10 +39,15 @@ system yet — send it back to the inbox or cut it.
 ### #revenue-ops
 
 - [ ] Hope Baptist — confirm current next action / status
-- [ ] MacroManagement.Co — get a verbal yes on build fee + retainer,
-      lock specs (calculator formula, delivery-fee amount/threshold,
-      à-la-carte price, LLC status, SMS triggers). Warm client, wants
-      work, currently not attended to.
+- [ ] MacroManagement.Co — full brief now in Vault/MacroManagement-Brief.md.
+      Staged plan, in order: (1) surface the GA commercial-kitchen
+      requirement with the client FIRST, before anything else — it can
+      end their business model if unaddressed; (2) get food-cost-per-meal
+      to pressure-test the $130/15-meal price; (3) confirm build-vs-rent
+      architecture with them; (4) send a written scope + pricing doc,
+      signed before any build — do not repeat the Ovis Canem pattern of
+      building on a verbal understanding; (5) build the calculator.
+      Currently at step 1 — not yet raised with the client.
 - [ ] Ovis Canem handoff — still owed: plain-language deploy guide for
       Jared, Jared's own sandbox Vercel project, an IP-ownership doc,
       and connecting both Claudes to the Build Board
