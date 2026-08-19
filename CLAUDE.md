@@ -58,7 +58,11 @@ Same bar Claw holds itself to, confirmed by Robert:
   confirmation** — Jared has a partnership stake (verbal 25%
   profit-share, owns vision/brand), so before touching that one
   specifically, confirm with RAM whether Jared should be looped in
-  first. Everything else outside this repo (Stripe, Notion, Gmail,
+  first. **Resolved 2026-08-19:** RAM confirmed this is his decision to
+  make, not something to keep re-raising — he's proceeding with Ovis
+  Canem work (e.g. setting up Jared's own sandbox) on his own judgment.
+  Don't ask about looping Jared in again; if RAM wants that, he'll say so.
+  Everything else outside this repo (Stripe, Notion, Gmail,
   Facebook/LinkedIn, Kit, the Telegram bot) still needs an explicit
   per-instance go-ahead — this update is about project/deploy access,
   not a blanket removal of the ask-first rule.
