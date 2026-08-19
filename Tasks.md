@@ -8,7 +8,8 @@ the inbox, never from the full backlog.
 - [ ] MacroManagement.Co — raise the GA commercial-kitchen requirement
       with the client first (step 1 of the staged plan)
 - [ ] Ovis Canem handoff — deploy guide, sandbox project, IP-ownership doc
-- [ ] LongHorn training, 4:30pm today
+- [ ] LongHorn I-9 — find out exactly what "original documents" means
+      to her before going back
 
 ## Backlog
 
@@ -20,8 +21,15 @@ system yet — send it back to the inbox or cut it.
 - [x] Get total cash on hand across all accounts — done 2026-08-18: Way2Go
       $4, SoFi ~$1, Chime -$300. See Pillars/Finance.md.
 - [x] UI weekly benefit deposit — landed 2026-08-19, $360
-- [x] LongHorn I-9/SSA issue — confirmed via text to GM Danielle, back
-      on schedule, training set for 2026-08-19 at 4:30pm
+- [ ] **LongHorn I-9/SSA issue — reopened 2026-08-19, not actually
+      resolved.** Training happened, but tried to submit the laminated
+      certified birth certificate + the SSN replacement-card receipt
+      (not the physical card, which hasn't arrived yet) — HR rejected
+      both, insists on original documents. This blocks pay, which
+      blocks Sept 1 rent. Need to confirm with her exactly what counts
+      as "original" (does she need the actual physical SSN card once it
+      arrives, or an unlaminated birth certificate, or both?) before
+      trying again.
 - [x] Car insurance payment — paid 2026-08-19, $170 (actual, vs. ~$180
       estimated)
 - [ ] Confirm TNDD wage-omission appeal status — deadline was 08/05/2026,
