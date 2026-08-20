@@ -56,13 +56,19 @@ system yet — send it back to the inbox or cut it.
       signed before any build — do not repeat the Ovis Canem pattern of
       building on a verbal understanding; (5) build the calculator.
       Currently at step 1 — not yet raised with the client.
-- [ ] Ovis Canem — full working notes in Vault/Ovis-Canem.md. Three
-      items: (1) get Jared's sandbox built/deployed and the workflow
-      defined — blocked on pushing the main codebase to GitHub and
-      Jared consolidating his Artifacts prototypes; (2) structure the
-      project intellectually going forward rather than build-as-you-go;
-      (3) Jared wants a cleanup/remodel of the current oviscanem.com
-      site — not yet scoped.
+- [ ] Ovis Canem — full working notes in Vault/Ovis-Canem.md. Scope
+      changed 2026-08-20: Jared sent a full site-revision brief
+      (Vault/Ovis-Canem-Site-Revision-Brief.md) — not a cleanup, a full
+      membership-platform rebuild (3 pricing tiers, subscriptions,
+      lapse/lockout, new pages, feedback routing). Codebase is now on
+      GitHub (Somethingeasydude/ovis-canem), cloned, scanned clean of
+      secrets. Credentials from Claw's earlier email (Stripe live key,
+      Neon password, JWT secret, Vercel token) still need rotating —
+      not done yet. Stage 1 of the brief is blocked on Jared/Ovis
+      answering 5 questions (brief §16.1): monitored inbox email,
+      YouTube URL, TikTok URL, Discord public/member-only, trivia
+      question count. Non-blocked Stage 2 items (delete About page,
+      strip tiered pricing) can start without waiting on those.
 - [ ] Whitaker Agency / Liberty National — follow up on the Worksite
       Pipeline growth-infrastructure pitch (45 Cobb County businesses
       already mapped)
