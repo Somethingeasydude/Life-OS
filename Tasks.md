@@ -56,9 +56,13 @@ system yet — send it back to the inbox or cut it.
       signed before any build — do not repeat the Ovis Canem pattern of
       building on a verbal understanding; (5) build the calculator.
       Currently at step 1 — not yet raised with the client.
-- [ ] Ovis Canem handoff — still owed: plain-language deploy guide for
-      Jared, Jared's own sandbox Vercel project, an IP-ownership doc,
-      and connecting both Claudes to the Build Board
+- [ ] Ovis Canem — full working notes in Vault/Ovis-Canem.md. Three
+      items: (1) get Jared's sandbox built/deployed and the workflow
+      defined — blocked on pushing the main codebase to GitHub and
+      Jared consolidating his Artifacts prototypes; (2) structure the
+      project intellectually going forward rather than build-as-you-go;
+      (3) Jared wants a cleanup/remodel of the current oviscanem.com
+      site — not yet scoped.
 - [ ] Whitaker Agency / Liberty National — follow up on the Worksite
       Pipeline growth-infrastructure pitch (45 Cobb County businesses
       already mapped)
