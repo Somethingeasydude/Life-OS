@@ -11,6 +11,7 @@
 | | Pre-revenue, active pipeline | Y |
 | 2026-08-09 | Still pre-revenue this month; Hope Baptist retainer already paid for the year, no new bookings | Y |
 | 2026-08-16 | No change — still pre-revenue, no new bookings logged | Y |
+| 2026-08-23 | Still pre-revenue this month, no new bookings. MacroManagement still at step 1 — the GA commercial-kitchen finding has not yet been raised with the client. Ovis Canem scope expanded substantially (full membership-platform brief from Jared) — real work, but unpaid/profit-share, not booked revenue. | Y |
 
 ## Notes
 
@@ -27,12 +28,19 @@ RAM Strategic Systems LLC formed Dec 2025.
   their existing store. Not yet quoted or signed. Regulatory flag: GA
   food code requires a commercial kitchen for refrigerated prepared
   meals — needs checking before scoping further.
-- **Ovis Canem** (KJV study app, partner Jared, family) — Ram is
-  technical architect/operator. Compensation: verbal 25% profit-share
-  (not equity), starts after year 1, no formal contract, Jared won't pay
-  a retainer. Handoff in progress via a Notion "Build Board"; still owed:
-  a plain-language deploy guide for Jared, Jared's own sandbox Vercel
-  project, and an IP-ownership doc.
+- **Ovis Canem** (KJV study app → full membership platform, partner
+  Jared, family) — Ram is technical architect/operator. Compensation:
+  verbal 25% profit-share (not equity), starts after year 1, no formal
+  contract. Scope expanded 2026-08-20: Jared sent a full site-revision
+  brief (subscriptions, member accounts, lapse/lockout, new pages) —
+  full detail in Vault/Ovis-Canem.md and
+  Vault/Ovis-Canem-Site-Revision-Brief.md. Codebase is now on GitHub
+  (Somethingeasydude/ovis-canem, private). Found and fixed, on an
+  unmerged branch not yet deployed, a live password-reset vulnerability
+  and a hardcoded credential in the committed code. Credential rotation
+  (Stripe live key, Neon DB password, JWT secret, Vercel deploy token,
+  Gmail app password) is still outstanding. The new build's Stage 1 is
+  blocked on Jared answering 5 open questions.
 - **Builder Intelligence Dashboard** (prior TNDD role) — Puppeteer permit
   scraper, 166 leads loaded, 13 passed to sales. Kept as proof-of-work,
   not active revenue.
