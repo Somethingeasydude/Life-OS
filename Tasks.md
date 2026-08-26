@@ -21,15 +21,12 @@ system yet — send it back to the inbox or cut it.
 - [x] Get total cash on hand across all accounts — done 2026-08-18: Way2Go
       $4, SoFi ~$1, Chime -$300. See Pillars/Finance.md.
 - [x] UI weekly benefit deposit — landed 2026-08-19, $360
-- [ ] **LongHorn I-9/SSA issue — reopened 2026-08-19, not actually
-      resolved.** Training happened, but tried to submit the laminated
-      certified birth certificate + the SSN replacement-card receipt
-      (not the physical card, which hasn't arrived yet) — HR rejected
-      both, insists on original documents. This blocks pay, which
-      blocks Sept 1 rent. Need to confirm with her exactly what counts
-      as "original" (does she need the actual physical SSN card once it
-      arrives, or an unlaminated birth certificate, or both?) before
-      trying again.
+- [ ] **LongHorn I-9/SSA issue — moving, not yet closed. Updated
+      2026-08-26:** physical SSN card has arrived. Going in today at 2pm
+      to get his schedule. Not yet confirmed whether the card has
+      actually been submitted to HR and accepted as the original
+      document she needed — close this out only once that's confirmed,
+      don't mark resolved on his intent to go in.
 - [x] Car insurance payment — paid 2026-08-19, $170 (actual, vs. ~$180
       estimated)
 - [ ] Confirm TNDD wage-omission appeal status — deadline was 08/05/2026,
@@ -43,6 +40,8 @@ system yet — send it back to the inbox or cut it.
       pay-for-delete on the closed-account balance
 - [ ] Confirm correct legal name spelling for GDOL records (has varied:
       Morales / Morales-Jover / Morales-Jovero)
+- [ ] Job opportunity — surfaced 2026-08-26, still deciding. No detail
+      captured yet on what it is or what's weighing on the decision.
 
 ### #revenue-ops
 
@@ -104,11 +103,11 @@ but this can't wait for that — logging it here so it isn't lost.
       captured yet. Likely connects to the existing debt-collection/FDCPA
       work already logged in Pillars/Finance.md (Aldous & Associates,
       CFPB complaint) — worth checking if it's the same thread or separate.
-- [ ] **Housing — most urgent.** Mom + her boyfriend Ryan occupying the
-      1BR as overstayed guests; police already called once; written
-      notice ignored; a false accusation was made against Ram. As of
-      2026-08-18: she says they still plan to leave by Aug 24. No action
-      needed unless that date passes — if they don't move out, file the
-      dispossessory at Hall County Magistrate (~$80 + $25/addl). Standing
-      guidance: stop accepting payment from them, no self-help eviction,
+- [ ] **Housing — most urgent. Updated 2026-08-26:** the Aug 24 target
+      date has passed. Mom said they "sign in" (on a new place,
+      presumably) at 4pm today, but it's not confirmed they're actually
+      moving out tonight. Watch for confirmation either way — if they
+      haven't actually vacated after today, the standing guidance
+      applies: file the dispossessory at Hall County Magistrate (~$80 +
+      $25/addl), stop accepting payment from them, no self-help eviction,
       everything through the court.

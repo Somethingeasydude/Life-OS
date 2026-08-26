@@ -14,6 +14,7 @@
 | 2026-08-18 | ~0 weeks. Way2Go $4, SoFi ~$1, Chime **-$300**. Net across accounts ≈ **-$295**. No independent buffer — entirely dependent on the UI deposit landing on schedule. | R |
 | 2026-08-19 | UI deposit landed ($360) and car insurance got paid ($170). Estimated: Way2Go ~$194, SoFi ~$1, Chime still **-$300** (unconfirmed) → net ≈ **-$105**. Assuming car insurance was paid from Way2Go — confirm if wrong. | R |
 | 2026-08-23 | No new cash-on-hand number since 8/19 — still unconfirmed. Dominant risk this week: the LongHorn I-9/SSA issue is still unresolved (HR rejected the laminated birth cert + SSN receipt, insists on originals), which blocks pay and directly threatens Sept 1 rent. Georgia Power (~$70) due 9/15, car insurance ($170) next due 9/18. | R |
+| 2026-08-26 | Physical SSN card has arrived — the actual document LongHorn HR needed. Going in today 2pm for schedule; not yet confirmed as accepted by HR, don't treat pay as unblocked until that's confirmed. Received a payment, ~$300 on hand (source not specified — confirm). Rent (~$1,005) still exceeds cash on hand. Also weighing a new job opportunity, undecided, no detail yet. | R |
 
 ## Notes
 
