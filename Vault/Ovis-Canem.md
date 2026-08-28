@@ -29,15 +29,40 @@ not deployed. Done so far:
   by default. Uses inline SVGs, not the icon webfont, so it's
   consistent across every page.
 
-**Stopped before touching pricing.** The "strip old tiered pricing"
-and "rebuild home page" items turned out to be more entangled with the
-live Stripe integration than expected — the home page price card and
-the `/products` pages have real `/checkout?tier=...` links wired into
-the actual payment flow. Changing displayed prices without also
-rebuilding the underlying subscription/pricing logic risks a
-site-says-X-charges-Y mismatch. Reclassified as Stage 1 work, not safe
-Stage 2 cosmetic cleanup — holding until the pricing architecture
-itself gets built.
+**Correction, same day:** re-examined the "blocked on pricing"
+conclusion above and it was too conservative — the actual pricing
+architecture work (brief §5: config-driven products, Phase 1 shows
+only Founding) doesn't depend on Jared's 5 open questions at all; those
+only gate footer links/contact email/trivia content. Went ahead and
+built it:
+
+- `public/pricing-config.js` is now the frontend source of truth for
+  what's for sale (price, label, `visible`, `implemented` per
+  product); `api/create-payment-intent.js`'s PRICES object is the
+  backend source of truth, kept in sync by hand since this is a
+  build-step-free static site.
+- Old $7 Chapter 1 / $27 Full Book tiers fully removed — frontend
+  cards, backend prices, and every tier-specific branch in
+  `stripe-webhook.js` (labels, email copy, Kit tag mapping).
+- Checkout, `/products`, `/products/proverbs`, and the home page price
+  card all now render from the same config instead of independently
+  hardcoded numbers — the site-says-X-charges-Y mismatch risk is gone.
+- Lifetime Membership ($197) added to the config and backend, marked
+  hidden — it's a one-time charge like Founding, so safe to wire now
+  even though not displayed until Phase 2.
+- Annual Membership ($57/yr) is defined in config but marked
+  `implemented: false` and stays hidden — it genuinely needs Stripe
+  Subscriptions, a different API than the PaymentIntent flow this
+  checkout uses. Not built. Do not flip it visible before that exists.
+- Loose end: `addToKit()` now references `KIT_TAG_LIFETIME`, which
+  doesn't exist in Vercel yet — a lifetime purchase would fail to tag
+  in Kit (silently, doesn't block the purchase) until that env var is
+  added.
+
+Still not done: the full home page structural rebuild (Morning App
+block, hero reorder, below-fold sections per brief §4.1) — only the
+price card itself got fixed for accuracy. Everything above is on
+`stage2/site-structure-cleanup`, pushed, not merged, not deployed.
 
 ## Architecture decision, 2026-08-19
 
