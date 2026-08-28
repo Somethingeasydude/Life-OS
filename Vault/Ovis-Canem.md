@@ -10,6 +10,35 @@ Stripe connected to Jared's live account).
 involvement in decisions here himself — not something to keep asking
 about. What follows is working scope/technical notes only.
 
+## Stage 2 build progress, 2026-08-26
+
+Branch `stage2/site-structure-cleanup` pushed to GitHub, not merged,
+not deployed. Done so far:
+- About page deleted (both `about.html` and `about/index.html`), all
+  nav/footer/CTA links removed, permanent `/about` → `/` redirect added.
+  Gospel is now 2nd in nav automatically.
+- Gospel page: added the response link ("I made a decision today" /
+  "I'd like to talk to someone") routing to `/contact` with context,
+  and a share button (Web Share API + copy-link fallback).
+- Contact page now reads the response link's context and prefills the
+  subject — still going through the existing Formspree form. The full
+  Discord-vs-email routing split (brief §12A.3) is NOT built — no
+  Discord webhook integration exists in this codebase at all yet.
+- Footer social bar built (`public/social-links.js` — plain config
+  Jared can edit directly), icons render only when a URL is set, empty
+  by default. Uses inline SVGs, not the icon webfont, so it's
+  consistent across every page.
+
+**Stopped before touching pricing.** The "strip old tiered pricing"
+and "rebuild home page" items turned out to be more entangled with the
+live Stripe integration than expected — the home page price card and
+the `/products` pages have real `/checkout?tier=...` links wired into
+the actual payment flow. Changing displayed prices without also
+rebuilding the underlying subscription/pricing logic risks a
+site-says-X-charges-Y mismatch. Reclassified as Stage 1 work, not safe
+Stage 2 cosmetic cleanup — holding until the pricing architecture
+itself gets built.
+
 ## Architecture decision, 2026-08-19
 
 Two separate properties, not one codebase:
