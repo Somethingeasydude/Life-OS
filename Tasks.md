@@ -40,8 +40,11 @@ system yet — send it back to the inbox or cut it.
       pay-for-delete on the closed-account balance
 - [ ] Confirm correct legal name spelling for GDOL records (has varied:
       Morales / Morales-Jover / Morales-Jovero)
-- [ ] Job opportunity — surfaced 2026-08-26, still deciding. No detail
-      captured yet on what it is or what's weighing on the decision.
+- [ ] **CAD Estimator — Busker.** Surfaced 2026-08-26, applied
+      2026-08-31: resume + cover letter submitted via email, also
+      applied via Indeed. Next: watch for a response/interview request.
+      No Glassdoor/comp research done yet — still open if useful before
+      an interview.
 
 ### #revenue-ops
 
