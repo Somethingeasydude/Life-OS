@@ -84,12 +84,29 @@ Same bar Claw holds itself to, confirmed by Robert:
 
 ## Known environment constraints (system upkeep, not pillar work)
 
-- claude.ai Project's GitHub connector: read works, write fails with a
-  403. Likely the fine-grained token was created Read-only instead of
-  Read-and-write. RAM confirmed the same failure independently. Fix:
-  regenerate the token with Contents set to Read-and-write, reauthorize
-  the connector. Not urgent — this session already writes to the repo
-  fine, so capture isn't blocked, just not yet available from the Project.
+- **Updated 2026-08-31 — root cause confirmed, not a token issue.**
+  claude.ai Project's GitHub connector: read works, write fails with
+  "403 Resource not accessible by integration." RAM regenerated the
+  fine-grained PAT with Contents: Read-and-write, scoped to
+  Somethingeasydude/Life-OS — confirmed correct via screenshot — and it
+  made no difference. Reason: the built-in connector (Settings →
+  Connectors → GitHub) is OAuth-only; it has no field to take a PAT, so
+  the PAT was never the thing being used. This is a known, currently
+  open bug on Anthropic's side, not something fixable from GitHub's
+  token settings: anthropics/claude-ai-mcp#822 (opened 2026-08-10,
+  still open — disconnect/reconnect, revoke+reauthorize, and
+  remove+re-add the connector all failed to fix it) and
+  anthropics/claude-code#80874 (same symptom, closed without a
+  documented fix). Don't re-diagnose this as a scope/permissions
+  problem in future sessions — it isn't one.
+  Workaround: Claude Code web/Code terminal sessions (like this one)
+  are NOT affected — they already write to the repo fine, so capture
+  isn't blocked, just not yet available from inside a Project chat. A
+  real fix for Project-chat write access would mean self-hosting a
+  custom GitHub MCP server with the PAT and adding it as a *custom*
+  connector — that's infrastructure and needs RAM's explicit go-ahead
+  before any session builds/deploys it. Otherwise: wait on Anthropic,
+  no ETA.
 - Dashboard is live at a Vercel-assigned URL under the correct account
   (`ramllcmanagement-5388's projects`) — deliberately parked on the
   default `.vercel.app` domain for now. RAM wants a custom domain under
