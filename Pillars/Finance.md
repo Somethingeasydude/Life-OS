@@ -15,6 +15,7 @@
 | 2026-08-19 | UI deposit landed ($360) and car insurance got paid ($170). Estimated: Way2Go ~$194, SoFi ~$1, Chime still **-$300** (unconfirmed) → net ≈ **-$105**. Assuming car insurance was paid from Way2Go — confirm if wrong. | R |
 | 2026-08-23 | No new cash-on-hand number since 8/19 — still unconfirmed. Dominant risk this week: the LongHorn I-9/SSA issue is still unresolved (HR rejected the laminated birth cert + SSN receipt, insists on originals), which blocks pay and directly threatens Sept 1 rent. Georgia Power (~$70) due 9/15, car insurance ($170) next due 9/18. | R |
 | 2026-08-26 | Physical SSN card has arrived — the actual document LongHorn HR needed. Going in today 2pm for schedule; not yet confirmed as accepted by HR, don't treat pay as unblocked until that's confirmed. Received a payment, ~$300 on hand (source not specified — confirm). Rent (~$1,005) still exceeds cash on hand. Also weighing a new job opportunity, undecided, no detail yet. | R |
+| 2026-08-31 | **Active rent crisis.** Rent (~$1,005) due tomorrow 9/1. Actual cash on hand: **~$25**, not the $300 logged 8/26 — correcting that number. UI benefit (~$365) expected to land tonight or tomorrow. LongHorn I-9 issue is resolved enough to be scheduled — training starts today 5pm, first paycheck timing TBD. Even with the UI deposit, still ~$615 short of full rent. Plan: contact Park Hill leasing (Henry) proactively for partial payment + short grace period before rent is late, not after; 211 / Family Promise of Hall County as backup if leasing says no. | R |
 
 ## Notes
 

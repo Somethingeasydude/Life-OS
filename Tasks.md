@@ -5,11 +5,17 @@
 Pull ≤ 3 from the backlog below. Work from this list only — never from
 the inbox, never from the full backlog.
 
+- [ ] **Rent crisis — contact Park Hill (Henry) TODAY, before rent is
+      late tomorrow (9/1).** ~$25 on hand, UI deposit (~$365) expected
+      tonight/tomorrow, still ~$615 short even after it lands. Ask for
+      partial payment now + short grace period, citing UI deposit +
+      new job starting today. Backup: 211 / Family Promise of Hall
+      County for emergency rent assistance if leasing says no.
+- [ ] LongHorn — training starts today 5pm (I-9 issue resolved enough
+      to be scheduled). Confirm first paycheck date/schedule once
+      known — feeds directly into the rent conversation.
 - [ ] MacroManagement.Co — raise the GA commercial-kitchen requirement
       with the client first (step 1 of the staged plan)
-- [ ] Ovis Canem handoff — deploy guide, sandbox project, IP-ownership doc
-- [ ] LongHorn I-9 — find out exactly what "original documents" means
-      to her before going back
 
 ## Backlog
 
@@ -21,12 +27,10 @@ system yet — send it back to the inbox or cut it.
 - [x] Get total cash on hand across all accounts — done 2026-08-18: Way2Go
       $4, SoFi ~$1, Chime -$300. See Pillars/Finance.md.
 - [x] UI weekly benefit deposit — landed 2026-08-19, $360
-- [ ] **LongHorn I-9/SSA issue — moving, not yet closed. Updated
-      2026-08-26:** physical SSN card has arrived. Going in today at 2pm
-      to get his schedule. Not yet confirmed whether the card has
-      actually been submitted to HR and accepted as the original
-      document she needed — close this out only once that's confirmed,
-      don't mark resolved on his intent to go in.
+- [x] LongHorn I-9/SSA issue — resolved enough to schedule. Updated
+      2026-08-31: training starts today 5pm, so HR accepted the SSN
+      card in practice. First paycheck date still unconfirmed — see
+      Today list.
 - [x] Car insurance payment — paid 2026-08-19, $170 (actual, vs. ~$180
       estimated)
 - [ ] Confirm TNDD wage-omission appeal status — deadline was 08/05/2026,
