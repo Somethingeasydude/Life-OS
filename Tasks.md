@@ -5,12 +5,11 @@
 Pull ≤ 3 from the backlog below. Work from this list only — never from
 the inbox, never from the full backlog.
 
-- [ ] **Rent crisis — contact Park Hill (Henry) TODAY, before rent is
-      late tomorrow (9/1).** ~$25 on hand, UI deposit (~$365) expected
-      tonight/tomorrow, still ~$615 short even after it lands. Ask for
-      partial payment now + short grace period, citing UI deposit +
-      new job starting today. Backup: 211 / Family Promise of Hall
-      County for emergency rent assistance if leasing says no.
+- [ ] **Rent crisis — texted Henry (Park Hill) 2026-08-31, before rent
+      went late.** Offered $300 now + remaining ~$705 by Sept 12
+      (training pay + UI). Waiting on his reply — don't double-text.
+      Send the $300 once UI deposit lands. Backup if he says no: 211 /
+      Family Promise of Hall County for emergency rent assistance.
 - [ ] LongHorn — training starts today 5pm (I-9 issue resolved enough
       to be scheduled). Confirm first paycheck date/schedule once
       known — feeds directly into the rent conversation.
