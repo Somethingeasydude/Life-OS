@@ -97,6 +97,48 @@ sitting on the branch, unmerged, purely as a reference if it's ever
 useful. Don't build further on it or polish it. When Jared's real
 integration lands, that's the actual trivia feature.
 
+## Architecture pivot, 2026-08-31: one codebase, not two properties
+
+**Reverses the 2026-08-19 "two separate properties" decision.** RAM
+raised a real doubt about whether Jared can actually execute his own
+Vercel deployment (separate account, git repo, env vars) — tonight's
+session had real friction getting even a properly-supported deploy
+working. Given that risk, the new standing architecture:
+
+- **One codebase: this one.** No separate Vercel project for Jared,
+  no cross-domain token handoff, no separate auth system.
+- **Jared's job:** build things in Claude Artifacts (Morning App, a
+  quiz/trivia tool, coloring books — already in progress), export the
+  code, hand it over. Transfer mechanism doesn't matter.
+- **Robert's/Claude's job:** review Jared's code for security before
+  merging (this now shares the same login/database/session as real
+  paying members — a bug in his code has a real blast radius it
+  didn't have under the separate-properties plan) and integrate it as
+  new pages in this same codebase, behind the same login.
+- **The member dashboard is the "activity picker"** — one hub per
+  member, tiles out to whatever's actually built.
+
+**Real open item this creates:** Vercel Hobby's 12-function cap is
+confirmed maxed at exactly 12/12 right now, *before* any of Jared's
+apps get added. Every backend feature he needs (saved quiz scores,
+coloring-book progress, anything non-static) competes for the same
+slots as checkout/login/webhook code. Needs the Pro-vs-consolidate
+call before his first real feature lands, not after.
+
+## Member dashboard shipped, 2026-08-31
+
+Live now (merged straight to `main`, no branch review needed — purely
+additive, no payment logic touched): `/dashboard` is the real post-login
+landing page, replacing a hardcoded redirect straight into
+`/study/proverbs` that had been standing in for a dashboard that never
+existed. Reuses the existing `/api/verify` endpoint — needed zero new
+serverless functions, deliberately, given the 12/12 cap above.
+
+Tiles: Proverbs Study Guide (active), Morning App / Bible Trivia /
+Coloring Books (Coming Soon, until Jared hands over real code for any
+of them). Login, the post-purchase welcome flow, and the nav's auth
+link all repointed from `/study/proverbs` to `/dashboard`.
+
 **This same question likely applies to other "Robert owns" items in
 the brief too** — anything that sounds like a standalone interactive
 tool (not core site plumbing) should be checked against "is Jared
