@@ -157,16 +157,43 @@ push small fixes himself without routing through a session each time
 needed) goes live automatically. Waiting on Jared's GitHub
 username/email from RAM to actually add him.
 
-**Remaining real gaps, Jared-independent, not yet built:**
-- Skippable email capture specifically on the demo end card (brief
-  §10) — the home page has a general email capture, but not one tied
-  to the flashcard demo's completion
-- Analytics events — brief §13's exact list not verified against what
-  analytics-event.js/session.js already track
-- Existing $7/$24 members upgraded to founding — no migration run
-- 1,000-member overage handling — not explicitly verified
-- Full acceptance checklist (§17) — no real end-to-end test purchase
-  has been run
+**Update, later same night — all of the above shipped except two things
+that genuinely can't be done from this session:**
+
+- Skippable email capture on the flashcard demo's Chapter Complete
+  card — done. Dismissible, tracked, never shown twice per session.
+- Sitewide analytics per brief §13 — done. New `public/site-analytics.js`
+  reuses the existing `/api/analytics-event` endpoint (no backend
+  change needed) and now covers: page views, CTA clicks, gospel
+  response clicks, share clicks (gospel + flashcard demo), demo
+  started/completed, checkout started/completed/abandoned,
+  locked-content clicks (dashboard's Coming Soon tiles), beta feedback
+  submitted. Also added a private founding-count card to the existing
+  admin analytics dashboard (§5.6), reusing `/api/founding-count`.
+- 1,000-member founding cap — was previously **not enforced at all**
+  (the "sold out" text was purely cosmetic). Now real:
+  `create-payment-intent.js` checks the count before issuing a new
+  PaymentIntent for the founding tier and rejects once full. Anyone
+  already mid-checkout when the cap hits can still complete — the
+  check only runs at creation, not at confirmation — which is what the
+  brief means by "allow a small overage rather than hard-failing a
+  transaction in progress."
+- **$7/$24 → founding migration (§5.4):** wrote
+  `scripts/upgrade-legacy-members-to-founding.js`, a standalone Node
+  script (not a Vercel route — the 12-function cap made a permanent
+  endpoint the wrong call for a one-time task). **This session has no
+  access to the live DATABASE_URL, so this still needs to actually be
+  run** — instructions and a pre-flight cap-overage warning are in the
+  script's own comments. Not done until someone with real DB access
+  runs it.
+- **Full acceptance checklist / a real end-to-end test purchase (§17):**
+  genuinely cannot be done from this session — it would mean a real
+  charge on Jared's live Stripe account, and this session has no way
+  to safely simulate that. Needs RAM (or Jared) to actually do it.
+
+**Everything else identified as a real gap tonight has now been
+addressed on the code side.** The two items above are the only ones
+left, and both require action outside this session specifically.
 
 **This same question likely applies to other "Robert owns" items in
 the brief too** — anything that sounds like a standalone interactive
