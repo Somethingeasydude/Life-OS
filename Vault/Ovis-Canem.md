@@ -64,6 +64,45 @@ block, hero reorder, below-fold sections per brief §4.1) — only the
 price card itself got fixed for accuracy. Everything above is on
 `stage2/site-structure-cleanup`, pushed, not merged, not deployed.
 
+## Stage 3 build progress + a real redundancy caught, 2026-08-31
+
+All of this actually got merged to `main` and deployed live to
+oviscanem.com since the note above — confirmed working via a real
+Vercel deployment check (the git integration between the `ovis-canem`
+GitHub repo and the `sheepdog-demo` Vercel project wasn't set up until
+tonight; it is now, so pushes to `main` auto-deploy going forward).
+Added: Refund Policy page, Statement of Faith page shell (Jared's real
+wording still pending — the brief's draft skeleton is in there marked
+explicitly as a placeholder), checkout refund-acknowledgment checkbox
+(logged to the Stripe PaymentIntent's metadata, no DB migration
+needed), beta notice + share button on the flashcard demo, OG tags on
+demo pages.
+
+**Important correction — do not rebuild the trivia game again without
+checking this first.** Built a full trivia game engine directly in the
+oviscanem.com codebase (category picker, scoring, the Gospel-category
+end-screen behavior from §4.4) with placeholder questions, following
+the brief's literal text that assigns "Demo 2 — Bible Trivia Game" to
+Robert. **RAM then confirmed this is redundant** — the Morning App,
+the quiz/trivia tool, and a coloring book product are ALL things Jared
+is separately prototyping himself on his own Claude Max account, per
+the same two-properties-linked-at-runtime architecture already decided
+2026-08-19. The brief's text assigning trivia-building to "Robert" is
+out of date with how the real division of labor has actually evolved.
+
+**Open question, not yet resolved:** does Jared's own quiz build
+replace the free 3-category demo trivia the brief describes on
+oviscanem.com itself, or is his a separate, more elaborate member-only
+product served through the runtime link — meaning both could coexist?
+Don't guess on this — ask before touching trivia again. The engine I
+built (`public/trivia/`) still exists on the branch, untouched for now,
+in case the free-tier demo version turns out to still be wanted.
+
+**This same question likely applies to other "Robert owns" items in
+the brief too** — anything that sounds like a standalone interactive
+tool (not core site plumbing) should be checked against "is Jared
+already building this himself" before starting, given this precedent.
+
 ## Architecture decision, 2026-08-19
 
 Two separate properties, not one codebase:
