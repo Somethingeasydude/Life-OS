@@ -90,13 +90,12 @@ the same two-properties-linked-at-runtime architecture already decided
 2026-08-19. The brief's text assigning trivia-building to "Robert" is
 out of date with how the real division of labor has actually evolved.
 
-**Open question, not yet resolved:** does Jared's own quiz build
-replace the free 3-category demo trivia the brief describes on
-oviscanem.com itself, or is his a separate, more elaborate member-only
-product served through the runtime link — meaning both could coexist?
-Don't guess on this — ask before touching trivia again. The engine I
-built (`public/trivia/`) still exists on the branch, untouched for now,
-in case the free-tier demo version turns out to still be wanted.
+**Resolved 2026-08-31:** Jared will integrate his own real game himself.
+The `public/trivia/` engine built tonight (placeholder content, real
+scoring/game mechanism) is NOT going into production — it stays
+sitting on the branch, unmerged, purely as a reference if it's ever
+useful. Don't build further on it or polish it. When Jared's real
+integration lands, that's the actual trivia feature.
 
 **This same question likely applies to other "Robert owns" items in
 the brief too** — anything that sounds like a standalone interactive
