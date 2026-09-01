@@ -139,6 +139,35 @@ Coloring Books (Coming Soon, until Jared hands over real code for any
 of them). Login, the post-purchase welcome flow, and the nav's auth
 link all repointed from `/study/proverbs` to `/dashboard`.
 
+## Home page rebuild shipped, 2026-08-31
+
+Full rebuild to match brief §4.1's corrected structure, merged to
+`main` and live. Real content used where the brief actually provides
+it (FAQ §12.2 verbatim, "What's Included" §4.2 draft copy, marked as
+draft). Honest "Coming soon" placeholders for Morning App and Bible
+Trivia (both Jared's per tonight's architecture decision) and labeled
+empty containers for Workbook Previews / Testimonials (real
+images/quotes still pending from Jared/Ovis). Verse, logo, color
+scheme preserved exactly per §2.
+
+**RAM asked for Jared to get GitHub collaborator access** so he can
+push small fixes himself without routing through a session each time
+— repo is now git-connected to auto-deploy, so any push to `main`
+(including from a collaborator using GitHub's web editor, no git
+needed) goes live automatically. Waiting on Jared's GitHub
+username/email from RAM to actually add him.
+
+**Remaining real gaps, Jared-independent, not yet built:**
+- Skippable email capture specifically on the demo end card (brief
+  §10) — the home page has a general email capture, but not one tied
+  to the flashcard demo's completion
+- Analytics events — brief §13's exact list not verified against what
+  analytics-event.js/session.js already track
+- Existing $7/$24 members upgraded to founding — no migration run
+- 1,000-member overage handling — not explicitly verified
+- Full acceptance checklist (§17) — no real end-to-end test purchase
+  has been run
+
 **This same question likely applies to other "Robert owns" items in
 the brief too** — anything that sounds like a standalone interactive
 tool (not core site plumbing) should be checked against "is Jared
