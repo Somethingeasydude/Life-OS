@@ -43,11 +43,16 @@ system yet — send it back to the inbox or cut it.
       pay-for-delete on the closed-account balance
 - [ ] Confirm correct legal name spelling for GDOL records (has varied:
       Morales / Morales-Jover / Morales-Jovero)
-- [ ] **CAD Estimator — Busker Communications.** Surfaced 2026-08-26,
-      applied 2026-08-31: resume + cover letter submitted via email,
-      also applied via Indeed. Resume archived in Vault/Resume.md.
-      Next: watch for a response/interview request. No Glassdoor/comp
-      research done yet — still open if useful before an interview.
+- [ ] **Entry-Level Creative CAD/Estimator — Busker Communications**
+      (Gainesville, GA — 3395 White Sulphur Road). $52,000-$58,000/yr,
+      full health benefits + 401k match. Surfaced 2026-08-26, applied
+      2026-08-31: resume + cover letter via email, also applied on
+      Indeed (**status: Application viewed**, then the posting closed/
+      expired on Indeed — viewed-then-closed isn't necessarily a
+      rejection, companies often pull listings once they have enough
+      applicants). Resume archived in Vault/Resume.md. Next: watch for
+      a response/interview request. No Glassdoor/comp research done
+      yet — still open if useful before an interview.
 
 ### #revenue-ops
 
