@@ -7,7 +7,8 @@ the inbox, never from the full backlog.
 
 - [ ] MacroManagement.Co — raise the GA commercial-kitchen requirement
       with the client first (step 1 of the staged plan)
-- [ ] Ovis Canem handoff — deploy guide, sandbox project, IP-ownership doc
+- [ ] Ovis Canem — credential rotation still not done (see Today's
+      priority list); waiting on Jared to send real code for his tools
 - [ ] LongHorn I-9 — find out exactly what "original documents" means
       to her before going back
 
@@ -55,19 +56,19 @@ system yet — send it back to the inbox or cut it.
       signed before any build — do not repeat the Ovis Canem pattern of
       building on a verbal understanding; (5) build the calculator.
       Currently at step 1 — not yet raised with the client.
-- [ ] Ovis Canem — full working notes in Vault/Ovis-Canem.md. Scope
-      changed 2026-08-20: Jared sent a full site-revision brief
-      (Vault/Ovis-Canem-Site-Revision-Brief.md) — not a cleanup, a full
-      membership-platform rebuild (3 pricing tiers, subscriptions,
-      lapse/lockout, new pages, feedback routing). Codebase is now on
-      GitHub (Somethingeasydude/ovis-canem), cloned, scanned clean of
-      secrets. Credentials from Claw's earlier email (Stripe live key,
-      Neon password, JWT secret, Vercel token) still need rotating —
-      not done yet. Stage 1 of the brief is blocked on Jared/Ovis
-      answering 5 questions (brief §16.1): monitored inbox email,
-      YouTube URL, TikTok URL, Discord public/member-only, trivia
-      question count. Non-blocked Stage 2 items (delete About page,
-      strip tiered pricing) can start without waiting on those.
+- [ ] Ovis Canem — see "Current state" at the top of Vault/Ovis-Canem.md
+      for the full accurate picture (updated 2026-08-31). Short version:
+      almost everything buildable from this side is done and live —
+      real $37 pricing, member dashboard, home page rebuild, security
+      fixes, analytics, cap enforcement. What's actually left: (1)
+      credential rotation, still not done since it was first flagged —
+      Stripe live key, Neon password, JWT secret, Vercel token, Gmail
+      password; (2) waiting on Jared to answer his own brief's 5 open
+      questions and to send real code for his tools (Morning App,
+      trivia, coloring books — he's building in Claude Code); (3) the
+      $7/$24 legacy-member migration script is written but needs
+      someone with live DB access to run it; (4) a real end-to-end
+      test purchase, needs an actual charge on Jared's Stripe account.
 - [ ] Whitaker Agency / Liberty National — follow up on the Worksite
       Pipeline growth-infrastructure pitch (45 Cobb County businesses
       already mapped)
