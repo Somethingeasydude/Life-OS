@@ -10,6 +10,98 @@ Stripe connected to Jared's live account).
 involvement in decisions here himself — not something to keep asking
 about. What follows is working scope/technical notes only.
 
+## Current state (as of 2026-08-31 — read this first)
+
+**Architecture:** one codebase (this one), not two separate properties
+— this reverses an earlier 8/19 decision. Jared builds his own tools
+in Claude Code, hands over the code (mechanism doesn't matter — email,
+upload, or his own Claude Code session pushing to a branch once he has
+access), and it gets integrated as new pages/routes in this same
+codebase, behind the same login. No separate Vercel project for him,
+no cross-domain auth, no shared secrets.
+
+**Live on oviscanem.com right now:**
+- Real member dashboard at `/dashboard` — the actual post-login
+  landing page, replacing an old hardcoded redirect straight into
+  `/study/proverbs`. Tiles: Proverbs Study Guide (active), Morning App
+  / Bible Trivia / Coloring Books (Coming Soon, waiting on Jared).
+- Config-driven $37 Founding Membership pricing — old $7/$24/$27 tiers
+  fully removed everywhere (checkout, products pages, home page all
+  read one shared config now, not four independently hardcoded prices).
+- The 1,000-member cap is actually enforced server-side now — it used
+  to be cosmetic text only, nothing stopped purchase #1,001.
+- Full home page rebuild matching the brief's required structure
+  (logo → verse → headline → offer → primary CTA → below-fold
+  sections), with real content where the brief provides it (FAQ,
+  What's Included) and honest "Coming soon" / empty-container
+  placeholders where it doesn't (Morning App, Trivia, Workbook
+  Previews, Testimonials).
+- Hero copy rewritten twice on RAM's feedback: first to soften the
+  hard-sell price card back toward the simpler old style, then to stop
+  reading as Proverbs-only — now describes "a growing library of KJV
+  Bible study tools and activities," honestly not naming Jared's
+  unbuilt features by name.
+- Purchase CTAs (nav button + both home page offer blocks) now check
+  login state and swap to "Go to Your Dashboard" for members — a real
+  bug where a already-paying member saw a buy-more prompt the moment
+  they logged in.
+- Gospel page response links + share button; Refund Policy page +
+  checkout acknowledgment checkbox (logged to Stripe metadata, no DB
+  migration); Statement of Faith page shell (Jared's real wording
+  still pending, brief's draft skeleton marked explicitly as
+  placeholder).
+- Skippable email capture on the flashcard demo's completion screen —
+  dismissible, tracked, never shown twice per session.
+- Full sitewide analytics per the brief's §13 event list
+  (`public/site-analytics.js`) — page views, CTA clicks, share clicks,
+  gospel responses, checkout funnel, locked-content clicks, beta
+  feedback — reusing the existing `/api/analytics-event` endpoint, no
+  backend change needed.
+- A closed security hole: a live password-reset backdoor (anyone could
+  reset any account with just an email + a guessable string) is
+  disabled; a hardcoded Gmail password was moved out of source into an
+  env var reference.
+
+**Explicitly NOT done, and why — this is the real remaining list:**
+- Real code from Jared for Morning App / trivia / coloring books —
+  nothing to integrate until he actually sends something.
+- His own brief's 5 open questions (§16.1), still unanswered:
+  monitored inbox email, YouTube URL, TikTok URL, Discord
+  public-vs-member, trivia question count.
+- Statement of Faith's real wording, workbook preview images,
+  testimonials, the OG preview image — all his/Ovis's assets, not
+  buildable from this side.
+- Real Stripe Subscriptions for the $57/yr Annual tier — needs Jared's
+  Stripe dashboard directly, can't be faked from here.
+- Discord webhook / feedback-routing split — can't work, Discord
+  doesn't exist yet.
+- **$7/$24 → founding legacy-member migration** — script is written
+  (`scripts/upgrade-legacy-members-to-founding.js`) but this session
+  has no live `DATABASE_URL` access to actually run it.
+- **A real end-to-end test purchase** — needs an actual charge on
+  Jared's live Stripe account. Can't be simulated safely from here.
+- **Full credential rotation is still outstanding** — Stripe live key,
+  Neon DB password, JWT secret, Vercel deploy token, Gmail app
+  password all crossed email in plaintext hours before any of tonight's
+  work started. Flagged repeatedly, never confirmed done. This is the
+  single most important loose end left over the whole session.
+
+**Waiting on:**
+- Jared's GitHub username/email — to add him as a collaborator on
+  `Somethingeasydude/ovis-canem` so he (or his own Claude Code session)
+  can push small fixes directly. The repo already auto-deploys on any
+  push to `main`, confirmed working tonight.
+- A decision on Vercel Hobby (12 of 12 functions already in use) vs.
+  Pro (~$20/mo) — matters the moment Jared's first tool needs to save
+  anything server-side. Recommended: pay for Pro rather than refactor
+  the same code that runs live payments/login just to free up slots.
+
+---
+
+## History (chronological — earlier entries may be superseded by "Current state" above; kept for the audit trail)
+
+
+
 ## Stage 2 build progress, 2026-08-26
 
 Branch `stage2/site-structure-cleanup` pushed to GitHub, not merged,
