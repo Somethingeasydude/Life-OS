@@ -12,6 +12,7 @@
 | 2026-08-09 | Still pre-revenue this month; Hope Baptist retainer already paid for the year, no new bookings | Y |
 | 2026-08-16 | No change — still pre-revenue, no new bookings logged | Y |
 | 2026-08-23 | Still pre-revenue this month, no new bookings. MacroManagement still at step 1 — the GA commercial-kitchen finding has not yet been raised with the client. Ovis Canem scope expanded substantially (full membership-platform brief from Jared) — real work, but unpaid/profit-share, not booked revenue. | Y |
+| 2026-09-06 | Still pre-revenue, no new bookings — MacroManagement has now been stuck at step 1 (regulatory finding not raised with client) across multiple reviews in a row with no movement. Ovis Canem saw a large technical push (security fix, real \$37 pricing live, member dashboard shipped, home page rebuilt to spec, analytics, founding-cap enforcement) — genuinely substantial work, but still unpaid profit-share, not revenue, and credential rotation from weeks ago is still not done. | Y |
 
 ## Notes
 
