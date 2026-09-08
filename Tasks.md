@@ -5,12 +5,15 @@
 Pull ≤ 3 from the backlog below. Work from this list only — never from
 the inbox, never from the full backlog.
 
+- [ ] **Rent crisis — get the cure-period date in writing from the
+      leasing office (don't rely on the assumption from the 9/8 call),
+      call 211 for emergency rental assistance, and get on the LongHorn
+      schedule now that training is done.** See Pillars/Finance.md
+      2026-09-08 entry for full detail.
 - [ ] MacroManagement.Co — raise the GA commercial-kitchen requirement
       with the client first (step 1 of the staged plan)
 - [ ] Ovis Canem — credential rotation still not done (see Today's
       priority list); waiting on Jared to send real code for his tools
-- [ ] LongHorn I-9 — find out exactly what "original documents" means
-      to her before going back
 
 ## Backlog
 
@@ -22,12 +25,13 @@ system yet — send it back to the inbox or cut it.
 - [x] Get total cash on hand across all accounts — done 2026-08-18: Way2Go
       $4, SoFi ~$1, Chime -$300. See Pillars/Finance.md.
 - [x] UI weekly benefit deposit — landed 2026-08-19, $360
-- [ ] **LongHorn I-9/SSA issue — moving, not yet closed. Updated
-      2026-08-26:** physical SSN card has arrived. Going in today at 2pm
-      to get his schedule. Not yet confirmed whether the card has
-      actually been submitted to HR and accepted as the original
-      document she needed — close this out only once that's confirmed,
-      don't mark resolved on his intent to go in.
+- [x] LongHorn I-9/SSA issue — resolved by 2026-09-08: training shifts are
+      done, RAM confirmed he can start work now.
+- [ ] **Rent crisis — opened 2026-09-08.** Landlord called: rent unpaid,
+      RAM has less than half on hand. Late fee starts the 11th, eviction
+      process follows — exact trigger date unconfirmed, don't assume
+      end-of-month. Get the cure date in writing, call 211, get on the
+      LongHorn schedule immediately. Full detail in Pillars/Finance.md.
 - [x] Car insurance payment — paid 2026-08-19, $170 (actual, vs. ~$180
       estimated)
 - [ ] Confirm TNDD wage-omission appeal status — deadline was 08/05/2026,

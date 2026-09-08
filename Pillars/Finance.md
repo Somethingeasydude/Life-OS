@@ -16,6 +16,7 @@
 | 2026-08-23 | No new cash-on-hand number since 8/19 — still unconfirmed. Dominant risk this week: the LongHorn I-9/SSA issue is still unresolved (HR rejected the laminated birth cert + SSN receipt, insists on originals), which blocks pay and directly threatens Sept 1 rent. Georgia Power (~$70) due 9/15, car insurance ($170) next due 9/18. | R |
 | 2026-08-26 | Physical SSN card has arrived — the actual document LongHorn HR needed. Going in today 2pm for schedule; not yet confirmed as accepted by HR, don't treat pay as unblocked until that's confirmed. Received a payment, ~$300 on hand (source not specified — confirm). Rent (~$1,005) still exceeds cash on hand. Also weighing a new job opportunity, undecided, no detail yet. | R |
 | 2026-09-06 | **11 days with no Finance update at all — this pillar went dark while a long Ovis Canem technical session ran.** LongHorn resolution status unknown (did HR accept the SSN card? has pay actually started?). Job-opportunity decision unknown. No new cash-on-hand number since 8/26's ~$300 estimate. This gap itself is the finding: Finance can't be "the scoreboard" if it isn't checked for over a week during real precarity. | R |
+| 2026-09-08 | **Rent crisis — active.** Landlord (Park Hill) called: rent unpaid, RAM doesn't have half of it right now. She said late fee hits the 11th, then the eviction process starts — unclear from the call whether filing follows immediately after the 11th if still unpaid, or only near end of month; call ended awkwardly (she hung up after he mentioned unemployment). RAM is *assuming* he has until end of month but this is not confirmed — needs to be gotten in writing, not assumed. LongHorn: training is done, he can start shifts now — this is the fastest lever back to cash. | R |
 
 ## Notes
 
@@ -51,6 +52,26 @@ Known inputs so far (fill in the rest, then compute the first real row):
   the 18th of every month. Next due 2026-09-18.
 - Still needed: total cash on hand across all accounts — this is the one
   number that turns the health signal from "unknown" into real.
+- **Rent crisis, opened 2026-09-08:** landlord called about unpaid rent,
+  RAM has less than half of ~$1,005 on hand. She said a late fee applies
+  starting the 11th, then eviction process follows — exact trigger
+  (immediately after the 11th vs. later in the month) was not confirmed
+  before she hung up. Do not treat "till end of month" as confirmed —
+  get the actual cure-period date in writing from the leasing office.
+  GA does not mandate a rent grace period (it's whatever the lease
+  says), but actual physical eviction requires a dispossessory filed in
+  Hall County Magistrate Court, a 7-day answer window after service, and
+  a hearing — that process takes real weeks even if she files right after
+  the 11th, so a filing isn't the same as being out. Next actions: (1)
+  email/text the leasing office today to get the exact date/terms in
+  writing and confirm he's pursuing aid; (2) call 211 (United Way) today
+  for current Hall County emergency rental assistance intake; (3) Georgia
+  Legal Aid / Atlanta Legal Aid Society (serves Hall County) for free
+  guidance if a filing happens; (4) get on the LongHorn schedule
+  immediately — training is finished, this is the fastest income lever;
+  ask if any pay-advance/earned-wage option exists. If a dispossessory is
+  ever actually served, the 7-day written-answer deadline is the one
+  thing that cannot be missed.
 - Keep RAM's money and personal money separable — this OS is an operating
   *frame*, not a literal merge of bank accounts. Confirm with an
   accountant before treating them as one pool.
