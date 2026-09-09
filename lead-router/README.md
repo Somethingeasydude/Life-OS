@@ -113,7 +113,9 @@ If a call somehow arrives with no id, the key falls back to a content hash.
 
 ## Security
 
-- Bearer credential required on every request; constant-time comparison.
+- `Authorization: Bearer <VAPI_WEBHOOK_SECRET>` required on every request, and
+  it is the only accepted form — no bare tokens, no alternate headers.
+  Constant-time comparison.
 - **Fails closed**: returns 500 until `VAPI_WEBHOOK_SECRET` is set.
 - Non-POST rejected with 405.
 - Recipients come only from config — a crafted payload cannot redirect mail.
@@ -131,7 +133,6 @@ If a call somehow arrives with no id, the key falls back to a content hash.
 | `LEAD_FROM_EMAIL` | Yes | Verified sender, e.g. `RAM Lead Router <leads@ram-strategicsystems.com>` |
 | `VAPI_API_KEY` | Strongly recommended | Private key for the re-fetch. Without it most calls send nothing |
 | `LEAD_NOTIFICATION_EMAIL` | No | Recipients, comma-separated. Default `contact@ram-strategicsystems.com` |
-| `VAPI_WEBHOOK_SECRET_HEADER` | No | Default `authorization` |
 | `VAPI_API_BASE` | No | Default `https://api.vapi.ai` |
 | `STRUCTURED_OUTPUT_POLL_DELAYS_MS` | No | Default `3000,5000`. `off` disables re-fetching |
 | `STRUCTURED_OUTPUT_BUDGET_MS` | No | Default `15000` |

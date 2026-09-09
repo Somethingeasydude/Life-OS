@@ -14,8 +14,40 @@ test('accepts the Vapi Bearer Token credential', () => {
   assert.deepEqual(result, { ok: true });
 });
 
-test('accepts a bare token without the Bearer prefix', () => {
-  assert.equal(check({ method: 'POST', headers: { authorization: 'test-secret' } }).ok, true);
+test('accepts the Bearer scheme in any casing', () => {
+  for (const scheme of ['Bearer', 'bearer', 'BEARER']) {
+    assert.equal(check({ method: 'POST', headers: { [`authorization`]: `${scheme} test-secret` } }).ok, true, scheme);
+  }
+});
+
+test('rejects a bare token with no Bearer prefix', () => {
+  const result = check({ method: 'POST', headers: { authorization: 'test-secret' } });
+  assert.equal(result.status, 401);
+  assert.equal(result.reason, 'malformed_credential');
+});
+
+test('rejects other authorization schemes carrying the right secret', () => {
+  for (const header of ['Basic test-secret', 'Token test-secret', 'Bearer=test-secret']) {
+    const result = check({ method: 'POST', headers: { authorization: header } });
+    assert.equal(result.status, 401, header);
+    assert.equal(result.reason, 'malformed_credential', header);
+  }
+});
+
+test('rejects a Bearer prefix with no token', () => {
+  for (const header of ['Bearer', 'Bearer ', 'Bearer    ']) {
+    const result = check({ method: 'POST', headers: { authorization: header } });
+    assert.equal(result.status, 401, JSON.stringify(header));
+  }
+});
+
+test('rejects a duplicated Authorization header', () => {
+  const result = check({
+    method: 'POST',
+    headers: { authorization: ['Bearer test-secret', 'Bearer test-secret'] },
+  });
+  assert.equal(result.status, 401);
+  assert.equal(result.reason, 'missing_credential');
 });
 
 test('rejects a wrong or absent credential with 401', () => {
@@ -28,7 +60,7 @@ test('rejects a wrong or absent credential with 401', () => {
   assert.equal(missing.reason, 'missing_credential');
 
   const blank = check({ method: 'POST', headers: { authorization: '   ' } });
-  assert.equal(blank.reason, 'missing_credential');
+  assert.equal(blank.status, 401);
 });
 
 test('rejects a token that is merely a prefix of the secret', () => {
@@ -56,12 +88,10 @@ test('fails closed when no secret is configured', () => {
   assert.equal(result.reason, 'webhook_secret_not_configured');
 });
 
-test('honours a custom credential header name', () => {
-  const env = { VAPI_WEBHOOK_SECRET_HEADER: 'x-vapi-secret' };
-  assert.equal(check({ method: 'POST', headers: { 'x-vapi-secret': 'test-secret' } }, env).ok, true);
-  // The default header is no longer trusted once a custom one is configured.
-  assert.equal(
-    check({ method: 'POST', headers: { authorization: 'Bearer test-secret' } }, env).status,
-    401,
-  );
+test('ignores the secret presented in any other header', () => {
+  for (const header of ['x-vapi-secret', 'x-api-key', 'x-vapi-signature']) {
+    const result = check({ method: 'POST', headers: { [header]: 'test-secret' } });
+    assert.equal(result.status, 401, header);
+    assert.equal(result.reason, 'missing_credential', header);
+  }
 });
