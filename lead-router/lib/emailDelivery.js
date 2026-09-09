@@ -43,7 +43,7 @@ async function deliverEmail({ notification, client, idempotencyKey, fetchImpl } 
   const to = (client.notificationRecipients || []).filter((address) => EMAIL_RE.test(address));
   const doFetch = fetchImpl || globalThis.fetch;
 
-  // Local-only escape hatch: exercise the full pipeline with no API keys and no
+  // Escape hatch: exercise the full pipeline with no email provider and no
   // spend. Logged at warn so it can never quietly swallow real leads.
   if (process.env.DRY_RUN === '1') {
     logger.warn('notification_dry_run', {

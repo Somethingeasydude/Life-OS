@@ -139,9 +139,13 @@ If a call somehow arrives with no id, the key falls back to a content hash.
 | `DOOR4LIFE_ASSISTANT_IDS` | No | Pin the assistant. Required before a second client exists |
 | `DOOR4LIFE_ENABLED` | No | Default `true` |
 | `LOG_LEVEL` | No | `debug` \| `info` \| `warn` \| `error`. Keep at `info`+ in production |
-| `DRY_RUN` | No | `1` prints the email instead of sending. **Local only** |
+| `DRY_RUN` | No | `1` prints the email to the logs instead of sending. **Currently `1` in production** |
 
 See `.env.example`.
+
+The live Vapi and Vercel state — assistant id, structured output id, webhook
+URL, and the fixes applied directly through the Vapi API — is recorded in
+[`DEPLOYMENT.md`](./DEPLOYMENT.md).
 
 ## Deployment
 
