@@ -1,0 +1,42 @@
+{
+  "message": {
+    "type": "end-of-call-report",
+    "endedReason": "customer-ended-call",
+    "timestamp": 1788528600000,
+    "call": {
+      "id": "b7c1f0a2-9d3e-4f11-8a55-2c9e4d7b6a10",
+      "orgId": "0f2b7d61-3c44-4a8e-9f10-5b6c7d8e9f01",
+      "assistantId": "9a4c2e18-77b0-4d3a-b2f5-1e6d8c9a0b34",
+      "type": "inboundPhoneCall",
+      "startedAt": "2026-09-08T18:07:12.000Z",
+      "endedAt": "2026-09-08T18:10:00.000Z",
+      "customer": { "number": "+14707160158" }
+    },
+    "artifact": {
+      "transcript": "AI: Thanks for calling Door4Life. User: Hi, my front door is sticking...",
+      "structuredOutputs": {
+        "3f8b2c47-1d59-4e6a-9b07-5c2a8d1f4e63": {
+          "name": "door4life_service_lead",
+          "result": {
+            "caller_name": "Billy Bob",
+            "qualified_lead": true,
+            "callback_number": "470-716-0158",
+            "service_location": "Gainesville",
+            "desired_timing": "as soon as possible",
+            "door_condition": "sticking at the bottom",
+            "door_count": 1,
+            "door_material_type": "Mahogany",
+            "issue_summary": "Billy Bob has a residential mahogany door in Gainesville that is sticking at the bottom and needs restoration. He has photos available and would like a quote as soon as possible.",
+            "lead_priority": "HIGH",
+            "photos_available": true,
+            "pricing_interest": true,
+            "property_type": "residential",
+            "questions_for_team": "Service area confirmation for Gainesville.",
+            "recommended_action": "The team should follow up with Billy Bob to confirm service area coverage for Gainesville, provide instructions for submitting photos, and then review the photos to provide a quote for the mahogany door restoration.",
+            "service_requested": "door restoration and quote"
+          }
+        }
+      }
+    }
+  }
+}
