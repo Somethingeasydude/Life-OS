@@ -14,50 +14,34 @@ const SEND_ENDPOINT = 'https://gmail.googleapis.com/gmail/v1/users/me/messages/s
 // only end-of-call-report delivers — which is what keeps this grant this small.
 const SCOPE = 'https://www.googleapis.com/auth/gmail.send';
 
-const TOKEN_TTL_SECONDS = 3600;
 const REQUEST_TIMEOUT_MS = 10000;
 
 function base64url(value) {
   return Buffer.from(value).toString('base64url');
 }
 
-// Env vars can't hold real newlines, so private keys are stored with escaped
-// ones. Both forms are accepted.
-function privateKey() {
-  const raw = process.env.GOOGLE_PRIVATE_KEY;
-  if (!raw) return null;
-  return raw.includes('\\n') ? raw.replace(/\\n/g, '\n') : raw;
-}
-
-function impersonatedUser() {
-  const user = (process.env.GMAIL_IMPERSONATED_USER || '').trim();
+function sender() {
+  const user = (process.env.GMAIL_SENDER || '').trim();
   return EMAIL_RE.test(user) ? user : null;
 }
 
-function signJwt(key, claims) {
-  const header = base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-  const payload = base64url(JSON.stringify(claims));
-  const input = `${header}.${payload}`;
-  const signature = crypto.createSign('RSA-SHA256').update(input).sign(key, 'base64url');
-  return `${input}.${signature}`;
-}
-
 /**
- * Exchange a service-account assertion for an access token, impersonating the
- * mailbox via the `sub` claim. Domain-wide delegation is what authorises that
- * impersonation, and it is granted in the Workspace admin console for this
- * scope only.
+ * Trade the stored refresh token for a short-lived access token.
+ *
+ * The refresh token belongs to the Workspace account that granted consent, and
+ * the OAuth app is Internal — so it carries no 7-day expiry and needs no Google
+ * verification. Service-account keys were the first choice; org policy
+ * `iam.disableServiceAccountKeyCreation` blocks creating them, and this is the
+ * supported alternative that keeps the same single scope.
  */
-async function accessToken({ serviceAccountEmail, key, subject, doFetch, now }) {
-  const issued = Math.floor(now() / 1000);
-  const assertion = signJwt(key, {
-    iss: serviceAccountEmail,
-    sub: subject,
-    scope: SCOPE,
-    aud: TOKEN_ENDPOINT,
-    iat: issued,
-    exp: issued + TOKEN_TTL_SECONDS,
-  });
+async function accessToken({ doFetch }) {
+  const clientId = (process.env.GOOGLE_CLIENT_ID || '').trim();
+  const clientSecret = (process.env.GOOGLE_CLIENT_SECRET || '').trim();
+  const refreshToken = (process.env.GOOGLE_REFRESH_TOKEN || '').trim();
+
+  if (!clientId) throw new DeliveryError('GOOGLE_CLIENT_ID is not configured');
+  if (!clientSecret) throw new DeliveryError('GOOGLE_CLIENT_SECRET is not configured');
+  if (!refreshToken) throw new DeliveryError('GOOGLE_REFRESH_TOKEN is not configured');
 
   let response;
   try {
@@ -65,8 +49,10 @@ async function accessToken({ serviceAccountEmail, key, subject, doFetch, now }) 
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion,
+        grant_type: 'refresh_token',
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: refreshToken,
       }).toString(),
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
@@ -76,7 +62,9 @@ async function accessToken({ serviceAccountEmail, key, subject, doFetch, now }) 
 
   if (!response.ok) {
     const detail = await response.text().catch(() => '');
-    throw new DeliveryError(`google rejected the service-account assertion (${response.status})`, {
+    // invalid_grant here means the refresh token was revoked, or consent was
+    // re-granted elsewhere. Re-run scripts/mint-gmail-token.js.
+    throw new DeliveryError(`google rejected the refresh token (${response.status})`, {
       status: response.status,
       cause: detail.slice(0, 300),
     });
@@ -142,10 +130,8 @@ function buildMime({ from, to, notification, id }) {
  * Recipients come from client config only — never from the inbound payload — so
  * a crafted webhook cannot turn this into an open relay.
  */
-async function deliverGmail({ notification, client, idempotencyKey, fetchImpl, now = () => Date.now() } = {}) {
-  const serviceAccountEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim();
-  const key = privateKey();
-  const sender = impersonatedUser();
+async function deliverGmail({ notification, client, idempotencyKey, fetchImpl } = {}) {
+  const from = sender();
   const to = (client.notificationRecipients || []).filter((address) => EMAIL_RE.test(address));
   const doFetch = fetchImpl || globalThis.fetch;
 
@@ -161,14 +147,12 @@ async function deliverGmail({ notification, client, idempotencyKey, fetchImpl, n
     return { channel: 'gmail', messageId: null, recipientCount: to.length, dryRun: true };
   }
 
-  if (!serviceAccountEmail) throw new DeliveryError('GOOGLE_SERVICE_ACCOUNT_EMAIL is not configured');
-  if (!key) throw new DeliveryError('GOOGLE_PRIVATE_KEY is not configured');
-  if (!sender) throw new DeliveryError('GMAIL_IMPERSONATED_USER is missing or invalid');
+  if (!from) throw new DeliveryError('GMAIL_SENDER is missing or invalid');
   if (!to.length) throw new DeliveryError('no valid notification recipients configured');
 
-  const token = await accessToken({ serviceAccountEmail, key, subject: sender, doFetch, now });
-  const id = messageId(idempotencyKey, sender);
-  const raw = base64url(buildMime({ from: sender, to, notification, id }));
+  const token = await accessToken({ doFetch });
+  const id = messageId(idempotencyKey, from);
+  const raw = base64url(buildMime({ from, to, notification, id }));
 
   let response;
   try {

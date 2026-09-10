@@ -2,25 +2,19 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const crypto = require('crypto');
 
 const { deliverGmail, SCOPE, buildMime, encodeHeader, messageId } = require('../lib/gmailDelivery');
 const { DeliveryError } = require('../lib/deliveryError');
 const { door4lifeConfig } = require('../lib/config');
 const { withEnv, BASE_ENV } = require('./helpers');
 
-const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
-  modulusLength: 2048,
-  privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
-  publicKeyEncoding: { type: 'spki', format: 'pem' },
-});
-
 const GMAIL_ENV = {
   ...BASE_ENV,
   RESEND_API_KEY: undefined,
-  GOOGLE_SERVICE_ACCOUNT_EMAIL: 'lead-router@ram-demo.iam.gserviceaccount.com',
-  GOOGLE_PRIVATE_KEY: privateKey,
-  GMAIL_IMPERSONATED_USER: 'contact@ram-strategicsystems.com',
+  GOOGLE_CLIENT_ID: 'test-client-id.apps.googleusercontent.com',
+  GOOGLE_CLIENT_SECRET: 'test-client-secret',
+  GOOGLE_REFRESH_TOKEN: 'test-refresh-token',
+  GMAIL_SENDER: 'contact@ram-strategicsystems.com',
 };
 
 const NOTIFICATION = {
@@ -35,7 +29,7 @@ function googleFetch(recorded, { tokenOk = true, sendOk = true } = {}) {
     if (url.includes('oauth2.googleapis.com')) {
       return tokenOk
         ? { ok: true, status: 200, json: async () => ({ access_token: 'ya29.test-token' }) }
-        : { ok: false, status: 401, text: async () => 'unauthorized_client' };
+        : { ok: false, status: 400, text: async () => '{"error":"invalid_grant"}' };
     }
     return sendOk
       ? { ok: true, status: 200, json: async () => ({ id: 'gmail-msg-id' }) }
@@ -50,47 +44,27 @@ const send = (env = {}, fetchImpl, overrides = {}) =>
       client: door4lifeConfig(),
       idempotencyKey: 'door4life-lead-call-123',
       fetchImpl,
-      now: () => 1700000000000,
       ...overrides,
     }),
   );
 
-test('requests only the gmail.send scope', async () => {
+test('exchanges the refresh token for an access token', async () => {
   const calls = [];
   await send({}, googleFetch(calls));
+
+  assert.equal(calls[0].url, 'https://oauth2.googleapis.com/token');
+  assert.equal(calls[0].options.method, 'POST');
 
   const body = new URLSearchParams(calls[0].options.body);
-  const claims = JSON.parse(Buffer.from(body.get('assertion').split('.')[1], 'base64url').toString());
-
-  assert.equal(claims.scope, 'https://www.googleapis.com/auth/gmail.send');
-  assert.equal(SCOPE, 'https://www.googleapis.com/auth/gmail.send');
-  assert.doesNotMatch(claims.scope, /readonly|metadata|modify|mail\.google\.com/);
+  assert.equal(body.get('grant_type'), 'refresh_token');
+  assert.equal(body.get('client_id'), 'test-client-id.apps.googleusercontent.com');
+  assert.equal(body.get('client_secret'), 'test-client-secret');
+  assert.equal(body.get('refresh_token'), 'test-refresh-token');
 });
 
-test('signs a valid RS256 assertion that impersonates the mailbox', async () => {
-  const calls = [];
-  await send({}, googleFetch(calls));
-
-  const assertion = new URLSearchParams(calls[0].options.body).get('assertion');
-  const [header, payload, signature] = assertion.split('.');
-
-  assert.deepEqual(JSON.parse(Buffer.from(header, 'base64url').toString()), {
-    alg: 'RS256',
-    typ: 'JWT',
-  });
-
-  const claims = JSON.parse(Buffer.from(payload, 'base64url').toString());
-  assert.equal(claims.iss, 'lead-router@ram-demo.iam.gserviceaccount.com');
-  assert.equal(claims.sub, 'contact@ram-strategicsystems.com', 'impersonation subject');
-  assert.equal(claims.aud, 'https://oauth2.googleapis.com/token');
-  assert.equal(claims.iat, 1700000000);
-  assert.equal(claims.exp, 1700000000 + 3600);
-
-  const verified = crypto
-    .createVerify('RSA-SHA256')
-    .update(`${header}.${payload}`)
-    .verify(publicKey, Buffer.from(signature, 'base64url'));
-  assert.ok(verified, 'signature verifies against the service account public key');
+test('the adapter is send-only — it never asks for a read scope', () => {
+  assert.equal(SCOPE, 'https://www.googleapis.com/auth/gmail.send');
+  assert.doesNotMatch(SCOPE, /readonly|metadata|modify|mail\.google\.com/);
 });
 
 test('sends the message to Gmail with the bearer token', async () => {
@@ -145,10 +119,8 @@ test('carries both text and html parts', () => {
   assert.match(mime, /Content-Type: multipart\/alternative; boundary="ram-[a-f0-9]+"/);
   assert.match(mime, /Content-Type: text\/plain; charset="UTF-8"/);
   assert.match(mime, /Content-Type: text\/html; charset="UTF-8"/);
-
-  const parts = mime.split(/--ram-[a-f0-9]+/);
   assert.ok(
-    parts.some((p) => p.includes(Buffer.from(NOTIFICATION.text).toString('base64').slice(0, 20))),
+    mime.includes(Buffer.from(NOTIFICATION.text).toString('base64').slice(0, 20)),
     'text body present as base64',
   );
 });
@@ -160,8 +132,8 @@ test('sends only to configured recipients, never to payload-supplied ones', asyn
   assert.match(mime, /^To: contact@ram-strategicsystems\.com, ops@example\.com$/m);
 });
 
-test('refuses to send without the service account configured', async () => {
-  for (const missing of ['GOOGLE_SERVICE_ACCOUNT_EMAIL', 'GOOGLE_PRIVATE_KEY', 'GMAIL_IMPERSONATED_USER']) {
+test('refuses to send when any OAuth credential is missing', async () => {
+  for (const missing of ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REFRESH_TOKEN']) {
     await assert.rejects(
       () => send({ [missing]: undefined }, googleFetch([])),
       (error) => error instanceof DeliveryError && new RegExp(missing).test(error.message),
@@ -170,26 +142,23 @@ test('refuses to send without the service account configured', async () => {
   }
 });
 
-test('rejects an invalid impersonation address', async () => {
-  await assert.rejects(
-    () => send({ GMAIL_IMPERSONATED_USER: 'not-an-address' }, googleFetch([])),
-    (error) => error instanceof DeliveryError && /GMAIL_IMPERSONATED_USER/.test(error.message),
-  );
+test('rejects a missing or invalid sender address', async () => {
+  for (const value of [undefined, 'not-an-address']) {
+    await assert.rejects(
+      () => send({ GMAIL_SENDER: value }, googleFetch([])),
+      (error) => error instanceof DeliveryError && /GMAIL_SENDER/.test(error.message),
+    );
+  }
 });
 
-test('accepts a private key stored with escaped newlines', async () => {
-  const calls = [];
-  await send({ GOOGLE_PRIVATE_KEY: privateKey.replace(/\n/g, '\\n') }, googleFetch(calls));
-  assert.equal(calls.length, 2, 'escaped key still signs and sends');
-});
-
-test('surfaces a rejected assertion without leaking the key', async () => {
+test('surfaces a revoked refresh token without leaking the secret', async () => {
   await assert.rejects(
     () => send({}, googleFetch([], { tokenOk: false })),
     (error) => {
       assert.ok(error instanceof DeliveryError);
-      assert.equal(error.status, 401);
-      assert.doesNotMatch(error.message, /PRIVATE KEY/);
+      assert.equal(error.status, 400);
+      assert.match(String(error.cause), /invalid_grant/);
+      assert.doesNotMatch(error.message, /test-client-secret|test-refresh-token/);
       return true;
     },
   );

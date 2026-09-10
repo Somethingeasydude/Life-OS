@@ -146,9 +146,10 @@ works if you select it.
 | Variable | Required | Purpose |
 |---|---|---|
 | `VAPI_WEBHOOK_SECRET` | Yes | Expected Bearer token. Endpoint 500s without it |
-| `GOOGLE_SERVICE_ACCOUNT_EMAIL` | Yes | Service account address (`…@….iam.gserviceaccount.com`) |
-| `GOOGLE_PRIVATE_KEY` | Yes | Service account private key. Escaped `\n` accepted |
-| `GMAIL_IMPERSONATED_USER` | Yes | Workspace mailbox to send as — `contact@ram-strategicsystems.com` |
+| `GOOGLE_CLIENT_ID` | Yes | OAuth client id (Desktop app, Internal) |
+| `GOOGLE_CLIENT_SECRET` | Yes | OAuth client secret |
+| `GOOGLE_REFRESH_TOKEN` | Yes | Minted once via `scripts/mint-gmail-token.js` |
+| `GMAIL_SENDER` | Yes | Account that granted consent — `contact@ram-strategicsystems.com` |
 | `DELIVERY_ADAPTER` | No | `gmail` (default) or `resend` |
 | `RESEND_API_KEY` | Only for `resend` | Resend API key |
 | `LEAD_FROM_EMAIL` | Only for `resend` | Verified Resend sender |
@@ -173,10 +174,11 @@ URL, and the fixes applied directly through the Vapi API — is recorded in
 The Life-OS dashboard project is untouched by this — the router deploys as its
 own Vercel project from the same repo.
 
-1. **Google Workspace service account.** In Google Cloud, enable the Gmail API,
-   create a service account, and download its JSON key. In the Workspace admin
-   console, grant that service account domain-wide delegation for exactly one
-   scope: `https://www.googleapis.com/auth/gmail.send`. Full steps in
+1. **Google OAuth (Internal app).** In Google Cloud, enable the Gmail API,
+   set the OAuth consent screen to **Internal**, add the single scope
+   `https://www.googleapis.com/auth/gmail.send`, and create a **Desktop app**
+   OAuth client. Then mint a refresh token once with
+   `node scripts/mint-gmail-token.js`. Full steps in
    [`DEPLOYMENT.md`](./DEPLOYMENT.md).
 2. **Generate the webhook secret:**
    `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`

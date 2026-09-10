@@ -106,28 +106,46 @@ Mail for `ram-strategicsystems.com` is hosted on Google Workspace
 (`MX → smtp.google.com`), so the router sends from a mailbox that already
 exists. No new vendor, no DNS change, no domain verification.
 
-Auth is a **service account with domain-wide delegation**, impersonating
+Auth is **OAuth 2.0 with a refresh token**, granted by
 `contact@ram-strategicsystems.com`, scoped to
 `https://www.googleapis.com/auth/gmail.send` **and nothing else**. The router
 can send as that mailbox; it cannot read it.
 
+Service-account keys with domain-wide delegation were the first design. The
+org policy `iam.disableServiceAccountKeyCreation` blocks creating those keys —
+a sensible policy — so this uses the supported OAuth alternative at the same
+single scope.
+
+**The OAuth app must be Internal.** External + Testing issues refresh tokens
+that expire every 7 days, which would kill lead routing weekly. Internal apps
+have no such expiry and need no Google verification. They are still subject to
+a 6-month inactivity rule, irrelevant while leads flow.
+
 ### One-time setup
 
-1. **Google Cloud** — project → enable the Gmail API → create a service
-   account → create a JSON key and download it.
-2. **Workspace Admin** → Security → Access and data control → API controls →
-   Domain-wide delegation → Add new. Client ID is the service account's numeric
-   **Unique ID**; scope is exactly
-   `https://www.googleapis.com/auth/gmail.send`.
+1. **Google Cloud** — project → enable the Gmail API → OAuth consent screen →
+   **User type: Internal** → add scope
+   `https://www.googleapis.com/auth/gmail.send` → Credentials → Create OAuth
+   client ID → **Desktop app**.
+2. **Mint the refresh token**, locally, once:
+   ```bash
+   GOOGLE_CLIENT_ID=... GOOGLE_CLIENT_SECRET=... node scripts/mint-gmail-token.js
+   ```
+   It opens a consent URL, captures the callback on a loopback port, and prints
+   the refresh token. Desktop clients accept any `127.0.0.1` port without
+   registering it, so nothing needs adding in the console. The out-of-band
+   (OOB) flow Google used to document is deprecated and no longer works.
 3. **Vercel** → Settings → Environment Variables (Production):
-   `GOOGLE_SERVICE_ACCOUNT_EMAIL` (`client_email` from the JSON),
-   `GOOGLE_PRIVATE_KEY` (`private_key` from the JSON, `\n` escapes fine),
-   `GMAIL_IMPERSONATED_USER=contact@ram-strategicsystems.com`. Delete `DRY_RUN`.
-   Redeploy.
+   `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`,
+   `GMAIL_SENDER=contact@ram-strategicsystems.com`. Delete `DRY_RUN`. Redeploy.
 
-The JSON key is a long-lived credential. It is scoped to one send-only Gmail
-scope on one domain and is revocable from the admin console at any time. It is
-never committed.
+The refresh token is a long-lived credential, scoped to send-only Gmail for one
+account, and revocable at any time from
+[myaccount.google.com/permissions](https://myaccount.google.com/permissions).
+It is never committed.
+
+If sending ever fails with `invalid_grant`, the token was revoked or consent
+was re-granted elsewhere — re-run the minting script.
 
 ### Current state
 
