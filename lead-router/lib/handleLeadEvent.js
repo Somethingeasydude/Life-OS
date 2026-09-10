@@ -4,12 +4,17 @@ const crypto = require('crypto');
 
 const { logger, redactPhone } = require('./logger');
 const { resolveClient } = require('./config');
-const { parseVapiEvent, structuredOutputNames, isCallCompleteEvent } = require('./vapiEvent');
+const {
+  parseVapiEvent,
+  structuredOutputNames,
+  isCallCompleteEvent,
+  END_OF_CALL_REPORT,
+} = require('./vapiEvent');
 const { resolveStructuredOutput } = require('./resolveStructuredOutput');
 const { normalizeLead } = require('./normalizeLead');
 const { qualifyLead } = require('./qualifyLead');
 const { formatNotification } = require('./formatNotification');
-const { deliverEmail } = require('./emailDelivery');
+const { deliver } = require('./delivery');
 
 function idempotencyKey(client, event, notification) {
   if (event.callId) return `${client.clientId}-lead-${event.callId}`;
@@ -33,7 +38,7 @@ function idempotencyKey(client, event, notification) {
  * webhook log instead of being silently swallowed.
  */
 async function handleLeadEvent(rawBody, deps = {}) {
-  const deliver = deps.deliver || deliverEmail;
+  const send = deps.deliver || deliver;
   const resolveOutput = deps.resolveStructuredOutput || resolveStructuredOutput;
 
   const parsed = parseVapiEvent(rawBody);
@@ -127,7 +132,26 @@ async function handleLeadEvent(rawBody, deps = {}) {
   const notification = formatNotification({ lead, client, event, qualification });
   const key = idempotencyKey(client, event, notification);
 
-  const delivery = await deliver({
+  // Both completion events resolve a lead, but only the end-of-call report
+  // sends it. One notification per call, by construction — no dedupe store and
+  // no mailbox read scope needed. status-update/ended still logs the captured
+  // lead, so a report that never arrives is visible here rather than silent.
+  if (event.type !== END_OF_CALL_REPORT) {
+    logger.info('lead_captured_not_delivered', {
+      callId: event.callId,
+      clientId: client.clientId,
+      eventType: event.type,
+      reason: 'awaiting_end_of_call_report',
+      idempotencyKey: key,
+      subject: notification.subject,
+    });
+    return {
+      status: 200,
+      body: { status: 'captured', delivered: false, callId: event.callId },
+    };
+  }
+
+  const delivery = await send({
     notification,
     client,
     idempotencyKey: key,

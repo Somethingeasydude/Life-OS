@@ -79,41 +79,31 @@ test('an empty body is a 400, not a crash', async () => {
 });
 
 test('a delivery failure answers 500 without leaking internals', async () => {
-  const res = await call(
-    { method: 'POST', headers: AUTH, body: qualifiedEvent() },
-    { RESEND_API_KEY: undefined },
-  );
+  // Default adapter is gmail; with no service account configured it throws.
+  const res = await call({ method: 'POST', headers: AUTH, body: qualifiedEvent() });
   assert.equal(res.statusCode, 500);
   assert.deepEqual(res.body, { error: 'internal_error' });
 });
 
-test('a complete qualified call returns 200 notified', async () => {
-  const sent = [];
-  const fetchImpl = async (url, options) => {
-    sent.push({ url, options });
-    return { ok: true, status: 200, json: async () => ({ id: 'resend-id' }) };
-  };
-
-  const res = await withEnv(BASE_ENV, async () => {
-    const response = fakeRes();
-    // The endpoint owns its own dependencies, so drive delivery through a stub
-    // global fetch — this is the closest thing to an end-to-end run.
-    const originalFetch = globalThis.fetch;
-    globalThis.fetch = fetchImpl;
-    try {
-      await handler({ method: 'POST', headers: AUTH, body: qualifiedEvent() }, response);
-    } finally {
-      globalThis.fetch = originalFetch;
-    }
-    return response;
-  });
+test('a complete qualified call runs the default adapter and returns 200 notified', async () => {
+  // DRY_RUN exercises the real default (gmail) path end to end with no
+  // credentials and no network.
+  const res = await call({ method: 'POST', headers: AUTH, body: qualifiedEvent() }, { DRY_RUN: '1' });
 
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.status, 'notified');
-  assert.equal(sent.length, 1);
-  assert.equal(sent[0].url, 'https://api.resend.com/emails');
-  assert.equal(
-    sent[0].options.headers['Idempotency-Key'],
-    'door4life-lead-b7c1f0a2-9d3e-4f11-8a55-2c9e4d7b6a10',
-  );
+  assert.equal(res.body.channel, 'gmail');
+  assert.equal(res.body.callId, 'b7c1f0a2-9d3e-4f11-8a55-2c9e4d7b6a10');
+});
+
+test('a status-update/ended call is captured but not delivered', async () => {
+  const event = qualifiedEvent();
+  event.message.type = 'status-update';
+  event.message.status = 'ended';
+
+  const res = await call({ method: 'POST', headers: AUTH, body: event }, { DRY_RUN: '1' });
+
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.status, 'captured');
+  assert.equal(res.body.delivered, false);
 });

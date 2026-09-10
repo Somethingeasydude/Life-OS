@@ -40,7 +40,10 @@ caller → Vapi assistant → call ends
 | `lib/normalizeLead.js` | Extracted fields → typed lead, nothing invented |
 | `lib/qualifyLead.js` | notify / review / skip |
 | `lib/formatNotification.js` | Subject + text + escaped HTML |
-| `lib/emailDelivery.js` | Resend adapter, idempotency key, fixed recipients |
+| `lib/delivery.js` | Adapter registry + selection |
+| `lib/gmailDelivery.js` | **Default.** Gmail API over HTTPS, service account, `gmail.send` only |
+| `lib/emailDelivery.js` | Resend adapter — kept as a selectable alternative |
+| `lib/deliveryError.js` | Shared failure type |
 | `lib/logger.js` | Structured JSON logs with PII redaction |
 
 Zero runtime dependencies. Node 20+ (`fetch` and `node:test` are built in).
@@ -54,8 +57,9 @@ speech updates, status changes, tool calls. The endpoint acks all of them with
 - `end-of-call-report`
 - `status-update` where `status === "ended"`
 
-Both are accepted because `end-of-call-report` is not guaranteed to arrive.
-Processing the same call twice is harmless: delivery dedupes on the call id.
+Both resolve a lead, but **only `end-of-call-report` delivers one** — see
+Duplicate protection below. `status-update`/ended is kept as a capture-and-log
+path so a missing report is visible rather than silent.
 
 Anything else returns `{"status":"ignored"}`. Non-JSON or shapeless bodies get
 400. A failed send gets 500, so it shows in Vapi's webhook log instead of
@@ -105,17 +109,30 @@ request, not an appointment.
 
 ## Duplicate protection
 
-Every send carries `Idempotency-Key: door4life-lead-<callId>`. Resend dedupes on
-that for 24 hours, so a Vapi retry — or both completion events for one call —
-cannot produce a second email. No Redis, KV, or database, deliberately.
+**Only `end-of-call-report` sends.** One notification per call, by
+construction — no dedupe store, no mailbox read scope, no database.
 
-If a call somehow arrives with no id, the key falls back to a content hash.
+`status-update`/ended still resolves and qualifies the lead, and logs it as
+`lead_captured_not_delivered`. That keeps the fallback's diagnostic value: if a
+report ever fails to arrive, the logs show the lead was captured and nothing was
+sent, which is the signal to revisit.
+
+Every notification still carries a deterministic
+`Message-ID: <door4life-lead-<callId>@…>` for traceability back to the Vapi
+call, and because Gmail tends to collapse identical Message-IDs if one is ever
+sent twice. If a call arrives with no id, the key falls back to a content hash.
+
+The Resend adapter's `Idempotency-Key` is retained in that adapter and still
+works if you select it.
 
 ## Security
 
 - `Authorization: Bearer <VAPI_WEBHOOK_SECRET>` required on every request, and
   it is the only accepted form — no bare tokens, no alternate headers.
   Constant-time comparison.
+- Gmail access is `gmail.send` only. The router can send as the mailbox but
+  cannot read a single message in it. Duplicate protection lives upstream
+  precisely so no read scope is needed.
 - **Fails closed**: returns 500 until `VAPI_WEBHOOK_SECRET` is set.
 - Non-POST rejected with 405.
 - Recipients come only from config — a crafted payload cannot redirect mail.
@@ -129,8 +146,12 @@ If a call somehow arrives with no id, the key falls back to a content hash.
 | Variable | Required | Purpose |
 |---|---|---|
 | `VAPI_WEBHOOK_SECRET` | Yes | Expected Bearer token. Endpoint 500s without it |
-| `RESEND_API_KEY` | Yes | Resend API key |
-| `LEAD_FROM_EMAIL` | Yes | Verified sender, e.g. `RAM Lead Router <leads@ram-strategicsystems.com>` |
+| `GOOGLE_SERVICE_ACCOUNT_EMAIL` | Yes | Service account address (`…@….iam.gserviceaccount.com`) |
+| `GOOGLE_PRIVATE_KEY` | Yes | Service account private key. Escaped `\n` accepted |
+| `GMAIL_IMPERSONATED_USER` | Yes | Workspace mailbox to send as — `contact@ram-strategicsystems.com` |
+| `DELIVERY_ADAPTER` | No | `gmail` (default) or `resend` |
+| `RESEND_API_KEY` | Only for `resend` | Resend API key |
+| `LEAD_FROM_EMAIL` | Only for `resend` | Verified Resend sender |
 | `VAPI_API_KEY` | Strongly recommended | Private key for the re-fetch. Without it most calls send nothing |
 | `LEAD_NOTIFICATION_EMAIL` | No | Recipients, comma-separated. Default `contact@ram-strategicsystems.com` |
 | `VAPI_API_BASE` | No | Default `https://api.vapi.ai` |
@@ -152,11 +173,11 @@ URL, and the fixes applied directly through the Vapi API — is recorded in
 The Life-OS dashboard project is untouched by this — the router deploys as its
 own Vercel project from the same repo.
 
-1. **Resend.** Sign up (free tier: 3,000/month, 100/day). Add and verify
-   `ram-strategicsystems.com` under Domains, following the DNS records it gives
-   you. Create an API key with send permission. For a first smoke test before
-   DNS propagates, `onboarding@resend.dev` works as the sender to your own
-   account address.
+1. **Google Workspace service account.** In Google Cloud, enable the Gmail API,
+   create a service account, and download its JSON key. In the Workspace admin
+   console, grant that service account domain-wide delegation for exactly one
+   scope: `https://www.googleapis.com/auth/gmail.send`. Full steps in
+   [`DEPLOYMENT.md`](./DEPLOYMENT.md).
 2. **Generate the webhook secret:**
    `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
 3. **Vapi private API key.** Vapi Dashboard → API Keys → copy the private key.

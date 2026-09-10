@@ -2,18 +2,10 @@
 
 const { logger, redactEmail } = require('./logger');
 const { EMAIL_RE } = require('./config');
+const { DeliveryError } = require('./deliveryError');
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const REQUEST_TIMEOUT_MS = 10000;
-
-class DeliveryError extends Error {
-  constructor(message, { status = null, cause = null } = {}) {
-    super(message);
-    this.name = 'DeliveryError';
-    this.status = status;
-    this.cause = cause;
-  }
-}
 
 function senderAddress() {
   const from = (process.env.LEAD_FROM_EMAIL || '').trim();
@@ -26,9 +18,9 @@ function senderAddress() {
 }
 
 /**
- * Email delivery adapter. Future adapters (SMS, Slack, CRM) implement this same
- * shape: take a formatted notification plus routing config, return a result or
- * throw DeliveryError.
+ * Resend delivery adapter — retained as a working alternative, not the default.
+ * Live delivery runs through gmailDelivery; select this one with
+ * DELIVERY_ADAPTER=resend.
  *
  * Recipients come from client config only — never from the inbound payload — so
  * this can't be turned into an open relay by a crafted webhook.

@@ -127,15 +127,16 @@ test('a failing Vapi API lookup degrades instead of throwing', async () => {
   assert.equal(result.body.status, 'no_structured_output');
 });
 
-test('a status-update of "ended" also triggers resolution', async () => {
+test('a status-update of "ended" resolves the lead but does not send it', async () => {
   const { sent, deliver } = recorder();
   const event = qualifiedEvent();
   event.message.type = 'status-update';
   event.message.status = 'ended';
 
   const result = await run(event, { deliver });
-  assert.equal(result.body.status, 'notified');
-  assert.equal(sent.length, 1);
+  assert.equal(result.body.status, 'captured');
+  assert.equal(result.body.delivered, false);
+  assert.equal(sent.length, 0, 'only end-of-call-report delivers');
 });
 
 test('an in-progress status-update does not trigger resolution', async () => {
@@ -149,17 +150,22 @@ test('an in-progress status-update does not trigger resolution', async () => {
   assert.equal(sent.length, 0);
 });
 
-test('status-ended and end-of-call-report for one call share an idempotency key', async () => {
+test('both completion events for one call produce exactly one notification', async () => {
   const { sent, deliver } = recorder();
   const statusEvent = qualifiedEvent();
   statusEvent.message.type = 'status-update';
   statusEvent.message.status = 'ended';
 
+  // The real sequence: status-update/ended lands first, the report ~5s later.
   await run(statusEvent, { deliver });
   await run(qualifiedEvent(), { deliver });
 
-  assert.equal(sent.length, 2, 'both events do the work');
-  assert.equal(sent[0].idempotencyKey, sent[1].idempotencyKey, 'only one email survives at Resend');
+  assert.equal(sent.length, 1, 'one call, one email — no dedupe store required');
+  assert.equal(
+    sent[0].idempotencyKey,
+    'door4life-lead-b7c1f0a2-9d3e-4f11-8a55-2c9e4d7b6a10',
+    'deterministic key retained for traceability',
+  );
 });
 
 test('a lead with no usable caller data is logged, not emailed', async () => {

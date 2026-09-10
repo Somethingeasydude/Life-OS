@@ -98,12 +98,51 @@ Defaults: two attempts at 3s and 5s, hard-capped by a 15s budget, inside the
 
 ## Delivery
 
-`DRY_RUN=1` is set in production. The formatted lead prints to the Vercel
-runtime logs and **no email is sent**. `RESEND_API_KEY` and `LEAD_FROM_EMAIL`
-are not configured; `LEAD_NOTIFICATION_EMAIL` is
+Default adapter is **Gmail API** (`lib/gmailDelivery.js`), sending as the
+existing Workspace mailbox. Resend remains in the tree, selectable with
+`DELIVERY_ADAPTER=resend`, but is not configured.
+
+Mail for `ram-strategicsystems.com` is hosted on Google Workspace
+(`MX → smtp.google.com`), so the router sends from a mailbox that already
+exists. No new vendor, no DNS change, no domain verification.
+
+Auth is a **service account with domain-wide delegation**, impersonating
+`contact@ram-strategicsystems.com`, scoped to
+`https://www.googleapis.com/auth/gmail.send` **and nothing else**. The router
+can send as that mailbox; it cannot read it.
+
+### One-time setup
+
+1. **Google Cloud** — project → enable the Gmail API → create a service
+   account → create a JSON key and download it.
+2. **Workspace Admin** → Security → Access and data control → API controls →
+   Domain-wide delegation → Add new. Client ID is the service account's numeric
+   **Unique ID**; scope is exactly
+   `https://www.googleapis.com/auth/gmail.send`.
+3. **Vercel** → Settings → Environment Variables (Production):
+   `GOOGLE_SERVICE_ACCOUNT_EMAIL` (`client_email` from the JSON),
+   `GOOGLE_PRIVATE_KEY` (`private_key` from the JSON, `\n` escapes fine),
+   `GMAIL_IMPERSONATED_USER=contact@ram-strategicsystems.com`. Delete `DRY_RUN`.
+   Redeploy.
+
+The JSON key is a long-lived credential. It is scoped to one send-only Gmail
+scope on one domain and is revocable from the admin console at any time. It is
+never committed.
+
+### Current state
+
+`DRY_RUN=1` is still set, so the formatted lead prints to the Vercel runtime
+logs and **no email is sent** until the three variables above exist and
+`DRY_RUN` is removed. `LEAD_NOTIFICATION_EMAIL` is
 `contact@ram-strategicsystems.com`.
 
-To go live: configure a sender, remove `DRY_RUN`, redeploy.
+### SPF note
+
+The domain's SPF is `v=spf1 include:_spf.porkbun.com ~all` — it authorises
+Porkbun, not Google. Internal Workspace delivery (contact@ → contact@) is
+unaffected, but any mail Workspace sends to an external recipient currently
+fails SPF. The fix is `include:_spf.google.com`, at Porkbun, where this
+domain's DNS is hosted (not Cloudflare).
 
 ## Known gaps
 
