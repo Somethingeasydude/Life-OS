@@ -76,6 +76,14 @@ async function deliverEmail({ notification, client, idempotencyKey, fetchImpl } 
 
   if (!response.ok) {
     const detail = await response.text().catch(() => '');
+    // The provider's own explanation, kept because losing it once already made
+    // a 403 undiagnosable. Failure path only, so it costs nothing in steady
+    // state; truncated because these bodies are terse config errors.
+    logger.error('resend_rejected', {
+      clientId: client.clientId,
+      status: response.status,
+      body: detail.slice(0, 400),
+    });
     throw new DeliveryError(`email provider rejected the send (${response.status})`, {
       status: response.status,
       cause: detail.slice(0, 300),

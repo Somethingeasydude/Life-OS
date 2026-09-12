@@ -14,7 +14,7 @@ const { resolveStructuredOutput } = require('./resolveStructuredOutput');
 const { normalizeLead } = require('./normalizeLead');
 const { qualifyLead } = require('./qualifyLead');
 const { formatNotification } = require('./formatNotification');
-const { deliver } = require('./delivery');
+const { deliver, adapterName } = require('./delivery');
 
 function idempotencyKey(client, event, notification) {
   if (event.callId) return `${client.clientId}-lead-${event.callId}`;
@@ -151,6 +151,8 @@ async function handleLeadEvent(rawBody, deps = {}) {
     };
   }
 
+  logger.info('delivery_adapter_selected', { callId: event.callId, adapter: adapterName() });
+
   const delivery = await send({
     notification,
     client,
@@ -166,6 +168,10 @@ async function handleLeadEvent(rawBody, deps = {}) {
       clientId: client.clientId,
       action: qualification.action,
       channel: delivery.channel,
+      // Echoed back so Vapi's call log carries the provider message id. Vapi
+      // retains call records far longer than Vercel keeps runtime logs, so
+      // this is the durable half of the delivery trail.
+      messageId: delivery.messageId || null,
     },
   };
 }
