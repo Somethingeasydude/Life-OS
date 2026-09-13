@@ -13,6 +13,7 @@
 | 2026-08-16 | No change — still pre-revenue, no new bookings logged | Y |
 | 2026-08-23 | Still pre-revenue this month, no new bookings. MacroManagement still at step 1 — the GA commercial-kitchen finding has not yet been raised with the client. Ovis Canem scope expanded substantially (full membership-platform brief from Jared) — real work, but unpaid/profit-share, not booked revenue. | Y |
 | 2026-09-06 | Still pre-revenue, no new bookings — MacroManagement has now been stuck at step 1 (regulatory finding not raised with client) across multiple reviews in a row with no movement. Ovis Canem saw a large technical push (security fix, real \$37 pricing live, member dashboard shipped, home page rebuilt to spec, analytics, founding-cap enforcement) — genuinely substantial work, but still unpaid profit-share, not revenue, and credential rotation from weeks ago is still not done. | Y |
+| 2026-09-13 | Still pre-revenue, no new bookings. MacroManagement step 1 (raise the GA commercial-kitchen finding) is now unmoved across four reviews running. Ovis Canem: home page hero and nav auth-state bugs fixed (logged-in members were still seeing purchase CTAs), full build state written into Vault/Ovis-Canem.md per RAM's request — but credential rotation is still outstanding and remains the single oldest open item in this pillar. | Y |
 
 ## Notes
 
