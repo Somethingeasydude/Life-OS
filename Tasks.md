@@ -5,11 +5,17 @@
 Pull ≤ 3 from the backlog below. Work from this list only — never from
 the inbox, never from the full backlog.
 
-- [ ] **RENT — final due date 9/16.** Today, in this order: (1) confirm
-      the $365 UI deposit actually posted to Way2Go; (2) call the Park
-      Hill office for the exact total owed, accepted payment methods,
-      and any card convenience fee; (3) consolidate the three cards +
-      cash into one payment instrument. See Pillars/Finance.md.
+- [ ] **RENT — $1,180.00 owed per the 9/11 Repeat Notice, final due
+      date 9/16. Short $95.36 even if the UI deposit lands.** Today, in
+      this order: (1) confirm the $365 posted to Way2Go; (2) call the
+      Park Hill office — get the $175 delta over the lease figure
+      itemized, ask whether any late fee can be waived on payment in
+      full, and get written agreement to take ~$1,084 now with $95.36
+      by ~9/22; (3) find the $95.36 (Chase Business draw, Stripe
+      balance, or a short personal loan); (4) consolidate into one
+      payment instrument, and avoid the portal's card fee (~$35 on
+      $1,180, which would widen the gap to ~$130). See
+      Pillars/Finance.md.
 - [ ] **Car insurance $170 due 9/18 — call the carrier today** to move
       the payment date past the next UI deposit (~9/22). Rescheduled in
       advance, not silently missed.

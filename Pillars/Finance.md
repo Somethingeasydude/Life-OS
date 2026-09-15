@@ -17,7 +17,7 @@
 | 2026-08-26 | Physical SSN card has arrived — the actual document LongHorn HR needed. Going in today 2pm for schedule; not yet confirmed as accepted by HR, don't treat pay as unblocked until that's confirmed. Received a payment, ~$300 on hand (source not specified — confirm). Rent (~$1,005) still exceeds cash on hand. Also weighing a new job opportunity, undecided, no detail yet. | R |
 | 2026-09-06 | **11 days with no Finance update at all — this pillar went dark while a long Ovis Canem technical session ran.** LongHorn resolution status unknown (did HR accept the SSN card? has pay actually started?). Job-opportunity decision unknown. No new cash-on-hand number since 8/26's ~$300 estimate. This gap itself is the finding: Finance can't be "the scoreboard" if it isn't checked for over a week during real precarity. | R |
 | 2026-09-13 | **Now 18 days with no cash-on-hand number (last real figure 8/26, ~$300) and no confirmed LongHorn/job-opportunity resolution.** Same open questions as last week, unanswered a second time in a row. Georgia Power (~$70, due 9/15) and car insurance ($170, due 9/18) are both due within days of this review — status of both unconfirmed. This is now a two-review-running visibility gap, not a one-off. | R |
-| 2026-09-15 | **First real cash number since 8/26.** Confirmed on hand: three cards at $65.12 / $134.52 / $420.00 = $619.64, plus ~$100 cash = **~$719.64**. UI $365 expected to land 9/15 (unconfirmed at time of entry) → **~$1,084.64**. Rent $1,005 has its final due date 9/16 — coverable *only* if that UI deposit lands, and it leaves ~$80. Georgia Power (~$70, due 9/15) and car insurance ($170, due 9/18) are **not** covered before the next UI deposit (~9/22): ~$160 short. Runway well under one week. | R |
+| 2026-09-15 | **First real cash number since 8/26.** Confirmed on hand: three cards at $65.12 / $134.52 / $420.00 = $619.64, plus ~$100 cash = **~$719.64**. UI $365 expected to land 9/15 (unconfirmed at time of entry) → **~$1,084.64**. **Amount actually owed is $1,180.00, not the $1,005 lease figure** — per a "Repeat Notice" dated 9/11, a $175 delta that has not been itemized. Rent is therefore **NOT covered even if the UI deposit lands: short $95.36** (short $460.36 without it). Georgia Power (~$70) and car insurance ($170, due 9/18) both deferred behind rent. Runway well under one week. | R |
 
 ## Notes
 
@@ -59,9 +59,22 @@ Known inputs so far (fill in the rest, then compute the first real row):
 
 ## Rent — 2026-09-16 final due date
 
+- **Amount owed is $1,180.00, not $1,005.** A "Repeat Notice" dated
+  2026-09-11, delivered to Robert A Morales at 1545 Park Hill Dr. Unit
+  E-06, states a balance due of $1,180.00. That is $175 above the lease's
+  all-in monthly figure and **has not been itemized** — late fee, a prior
+  partial balance, or other charges, unknown which. Ask for the breakdown
+  and ask whether any late-fee portion can be waived on payment in full;
+  a waiver of even part of it closes most of the gap below.
 - **Position:** ~$719.64 confirmed + $365 UI expected 9/15 = ~$1,084.64
-  against $1,005 rent. The entire plan depends on one deposit landing on
-  time. If it doesn't, the shortfall is $285.36.
+  against $1,180.00 owed. **Short $95.36 even if the deposit lands**, and
+  short $460.36 if it doesn't. Every other bill deferred, this still does
+  not close.
+- **"Repeat Notice" is a formal demand, not a reminder.** In Georgia a
+  demand for rent is the step that precedes a dispossessory filing, and
+  filing adds court costs on top of the balance. Paying ~92% of it today
+  with a written date on the remainder is a materially stronger position
+  than going quiet — but it has to be agreed to in advance, in writing.
 - **Operational constraint, not just a dollar constraint:** the money is
   spread across three cards plus cash, and rent has to arrive as one
   payment. Consolidation (money orders, or moving balances onto one card)
