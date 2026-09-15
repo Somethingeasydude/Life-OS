@@ -5,12 +5,16 @@
 Pull ≤ 3 from the backlog below. Work from this list only — never from
 the inbox, never from the full backlog.
 
+- [ ] **RENT — final due date 9/16.** Today, in this order: (1) confirm
+      the $365 UI deposit actually posted to Way2Go; (2) call the Park
+      Hill office for the exact total owed, accepted payment methods,
+      and any card convenience fee; (3) consolidate the three cards +
+      cash into one payment instrument. See Pillars/Finance.md.
+- [ ] **Car insurance $170 due 9/18 — call the carrier today** to move
+      the payment date past the next UI deposit (~9/22). Rescheduled in
+      advance, not silently missed.
 - [ ] MacroManagement.Co — raise the GA commercial-kitchen requirement
       with the client first (step 1 of the staged plan)
-- [ ] Ovis Canem — credential rotation still not done (see Today's
-      priority list); waiting on Jared to send real code for his tools
-- [ ] LongHorn I-9 — find out exactly what "original documents" means
-      to her before going back
 
 ## Backlog
 
@@ -43,6 +47,17 @@ system yet — send it back to the inbox or cut it.
       Morales / Morales-Jover / Morales-Jovero)
 - [ ] Job opportunity — surfaced 2026-08-26, still deciding. No detail
       captured yet on what it is or what's weighing on the decision.
+- [x] Cash on hand — captured 2026-09-15: ~$719.64 across three cards +
+      ~$100 cash, before the expected $365 UI deposit.
+- [ ] **UI benefit runs out around mid-October** (~4 weeks of the ~13-week
+      benefit year left at $365/wk). October rent is survivable on that
+      math, November rent is not covered by any known income. This is
+      the real deadline behind every week's scramble — needs an income
+      decision (LongHorn hours, the undecided job opportunity, or a
+      booked RAM client) well before the last check lands.
+- [ ] Georgia Power ~$70 — was due 9/15, deliberately deferred behind
+      rent. Pay after the next UI deposit (~9/22); watch for a
+      disconnect notice, which is the actual deadline, not the due date.
 
 ### #revenue-ops
 
@@ -75,6 +90,14 @@ system yet — send it back to the inbox or cut it.
 - [ ] Whispering Woodturner (Uncle Joe) — get the discovery call
       scheduled; site is already built locally, just needs the
       conversation to move to delivery
+- [ ] Door4Life — a HIGH-priority quote lead hit
+      contact@ram-strategicsystems.com on 2026-09-12 (door repair, 1545
+      Gainesville, residential, rotting French mahogany door) and was
+      never worked. Door4Life itself isn't described anywhere in this
+      system yet — needs capturing.
+- [ ] Google Workspace payment failed 2026-09-02 (two notices). If it
+      stays unpaid it takes down contact@ram-strategicsystems.com —
+      small dollar amount, outsized consequence.
 - [ ] Systemize Claw's lead recon into a repeatable process
 
 ### #growth
