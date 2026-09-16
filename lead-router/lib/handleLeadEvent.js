@@ -111,6 +111,12 @@ async function handleLeadEvent(rawBody, deps = {}) {
     reason: qualification.reason,
     priority: lead ? lead.leadPriority : null,
     callbackNumber: lead ? redactPhone(lead.callbackNumber) : null,
+    // Data-quality signals, kept in the log because they are the only durable
+    // record of how well the assistant extracted this call.
+    callbackNumberPlausible: lead ? lead.callbackNumberPlausible : null,
+    ...(lead && lead.placeholderFields.length
+      ? { placeholderFields: lead.placeholderFields }
+      : {}),
   });
 
   if (qualification.action === 'skip') {

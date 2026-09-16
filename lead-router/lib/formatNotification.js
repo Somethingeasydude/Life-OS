@@ -35,8 +35,20 @@ function doorLine(lead) {
   return material ? `${count} ${material} ${noun}` : `${count} ${noun}`;
 }
 
+const UNVERIFIED_NUMBER_NOTE = 'could not be read as a valid phone number — verify before calling';
+
 function customerBlock(lead) {
-  const lines = [lead.callerName, lead.callbackNumber].filter(Boolean);
+  const lines = [];
+  if (lead.callerName) lines.push(lead.callerName);
+  if (lead.callbackNumber) {
+    // Shown exactly as captured, with the doubt attached to it rather than
+    // left for the reader to discover by dialling.
+    lines.push(
+      lead.callbackNumberPlausible === false
+        ? `${lead.callbackNumber}  (${UNVERIFIED_NUMBER_NOTE})`
+        : lead.callbackNumber,
+    );
+  }
   return lines.length ? lines.join('\n') : null;
 }
 
@@ -65,12 +77,26 @@ const DISCLAIMER =
   'Captured by the AI receptionist. Nothing here is confirmed, booked, quoted, or received — ' +
   'photos available means the caller said they have photos, and requested timing is a request, not an appointment.';
 
-const REVIEW_BANNER =
-  'The AI did not return a qualification flag for this call, so this lead has not been screened. ' +
-  'Review the summary below before acting on it.';
+// One banner per reason. A flagged lead should say what is actually wrong with
+// it — "needs review" without a cause just teaches the reader to ignore it.
+const REVIEW_BANNERS = {
+  qualification_missing:
+    'The AI did not return a qualification flag for this call, so this lead has not been screened. ' +
+    'Review the summary below before acting on it.',
+  callback_number_implausible:
+    'The callback number below could not be read as a valid phone number. It is shown exactly as ' +
+    'the AI captured it. Verify it against the call recording before relying on it.',
+};
+
+const REVIEW_BANNER = REVIEW_BANNERS.qualification_missing;
+
+function reviewBanner(reason) {
+  return REVIEW_BANNERS[reason] || REVIEW_BANNER;
+}
 
 function formatNotification({ lead, client, event, qualification }) {
   const needsReview = qualification.action === 'review';
+  const banner = reviewBanner(qualification.reason);
   const priority = lead.leadPriority || 'UNSPECIFIED';
   const priorityTag = needsReview ? 'NEEDS REVIEW' : priority;
   const who = lead.callerName || 'Unknown caller';
@@ -86,7 +112,7 @@ function formatNotification({ lead, client, event, qualification }) {
   ].filter(([, value]) => Boolean(value));
 
   const textParts = [`NEW ${client.businessName.toUpperCase()} LEAD`, ''];
-  if (needsReview) textParts.push(REVIEW_BANNER, '');
+  if (needsReview) textParts.push(banner, '');
   textParts.push(`Priority: ${priority}`, '');
   for (const [label, value] of sections) {
     textParts.push(`${label}:`, `${value}`, '');
@@ -118,7 +144,7 @@ function formatNotification({ lead, client, event, qualification }) {
     )}</strong></p>`,
     needsReview
       ? `<p style="margin:0 0 18px;padding:10px 12px;background:#fff4e5;border-left:3px solid #d97706">${escapeHtml(
-          REVIEW_BANNER,
+          banner,
         )}</p>`
       : '',
     htmlSections,
@@ -132,4 +158,12 @@ function formatNotification({ lead, client, event, qualification }) {
   return { subject, text, html };
 }
 
-module.exports = { formatNotification, escapeHtml, sanitizeHeader, buildSections };
+module.exports = {
+  formatNotification,
+  escapeHtml,
+  sanitizeHeader,
+  buildSections,
+  reviewBanner,
+  REVIEW_BANNERS,
+  UNVERIFIED_NUMBER_NOTE,
+};

@@ -8,7 +8,9 @@
  * an empty shell, is not.
  */
 function hasActionableData(lead) {
-  if (lead.callbackNumber) return true;
+  // A number nobody can dial is not contact information, so it cannot be the
+  // sole thing making a lead actionable.
+  if (lead.callbackNumber && lead.callbackNumberPlausible !== false) return true;
   const substance =
     lead.serviceRequested || lead.issueSummary || lead.doorCondition || lead.serviceLocation;
   return Boolean(lead.callerName && substance);
@@ -36,6 +38,12 @@ function qualifyLead(lead) {
   }
 
   if (lead.qualifiedLead === true) {
+    // The AI screened this in, but the callback number cannot be dialled as
+    // captured. Still sent — it is a real lead — but never dressed up as clean,
+    // because a confident-looking lead with a dead number is worse than none.
+    if (lead.callbackNumberPlausible === false) {
+      return { action: 'review', reason: 'callback_number_implausible' };
+    }
     return { action: 'notify', reason: 'qualified' };
   }
 
