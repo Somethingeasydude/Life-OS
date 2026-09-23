@@ -192,3 +192,20 @@ on Google Workspace (`MX → smtp.google.com`); DNS is at Porkbun, not Cloudflar
 
 Baseline commit: the commit that introduced this file, on
 `claude/ram-lead-router-backend-lqd8su`. Parent `956305e`.
+
+---
+
+## Appended 2026-09-23 — defect discovered after freeze
+
+Append-only: the numbered list above is left exactly as frozen, which ends at
+11. This defect was present at freeze time but not noticed until the
+2026-09-22 canary, so it is appended here as 12 rather than inserted above.
+
+12. **Door-line noun collision.** `doorLine()` built
+    `${count} ${material} ${noun}`, so a material that already ended in the
+    noun rendered it twice. Visible in this baseline's own evidence — the
+    2026-09-12 lead read `1 French mahogany door door` — and again on the
+    2026-09-22 canary as `1 mahogany French door door`. Cosmetic: no field was
+    wrong, and delivery and qualification were unaffected. It reads as broken
+    to a business owner, which is what made it worth fixing before a demo.
+    **Fixed by Phase B change B6** — see `PHASE-B.md`.

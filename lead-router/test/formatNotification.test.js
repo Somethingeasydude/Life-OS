@@ -68,6 +68,47 @@ test('pluralizes the door line and survives a missing material', () => {
   assert.match(render({ door_material_type: null, door_count: 2 }).text, /Door:\n2 doors/);
 });
 
+// B6. Observed in production on 2026-09-12 and again on the 2026-09-22 canary:
+// the caller described "a mahogany French door", and the formatter appended
+// its own noun on top of the one already there.
+test('regression: "1 mahogany French door door" never renders again', () => {
+  assert.match(
+    render({ door_material_type: 'mahogany French door', door_count: 1 }).text,
+    /Door:\n1 mahogany French door\n/,
+  );
+  assert.doesNotMatch(render({ door_material_type: 'mahogany French door', door_count: 1 }).text, /door door/i);
+});
+
+test('the noun agrees with the count however the caller phrased the material', () => {
+  const doorLine = (door_material_type, door_count) =>
+    render({ door_material_type, door_count }).text.match(/Door:\n(.+)/)[1];
+
+  // description already ends in the noun — singular and plural both corrected
+  assert.equal(doorLine('mahogany French door', 2), '2 mahogany French doors');
+  assert.equal(doorLine('French doors', 1), '1 French door');
+  assert.equal(doorLine('French Doors', 3), '3 French doors');
+
+  // description is a bare material — unchanged from the previous behaviour
+  assert.equal(doorLine('oak', 1), '1 oak door');
+  assert.equal(doorLine('oak', 2), '2 oak doors');
+
+  // the noun on its own is not doubled, and does not leave a dangling space
+  assert.equal(doorLine('door', 1), '1 door');
+  assert.equal(doorLine('doors', 4), '4 doors');
+});
+
+test('a material ending in the noun still renders without a count', () => {
+  assert.match(
+    render({ door_material_type: 'mahogany French door', door_count: null }).text,
+    /Door:\nMahogany French door\n/,
+  );
+});
+
+test('a word merely ending in "door" is not mistaken for the noun', () => {
+  // \b guards the strip: "outdoor" must survive intact.
+  assert.match(render({ door_material_type: 'outdoor oak', door_count: 1 }).text, /Door:\n1 outdoor oak door\n/);
+});
+
 test('escapes malicious caller text in the HTML body', () => {
   const { html, text } = render({
     caller_name: '<script>alert("xss")</script>',

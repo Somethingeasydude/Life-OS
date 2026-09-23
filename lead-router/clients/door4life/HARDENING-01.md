@@ -1,6 +1,11 @@
 # Hardening Cycle #1 — Phase A
 
-**Status: implemented, tested, not deployed.** Awaiting approval to deploy.
+**Status: COMPLETE.** 110/110 automated tests passing; production behavior
+verified on the 2026-09-22 canary; malformed-phone production regression test
+outstanding as non-blocking backlog evidence.
+
+Closed 2026-09-23. Deployed 2026-09-17 as `dpl_9hCEz2qT2pokXorbaMm8p1zvfzdB`
+from commit `a7b1bbc`.
 
 North star for this cycle:
 
@@ -176,3 +181,50 @@ the assistant is the prerequisite for Phase B.
 
 Also unaddressed by design: no delivery retry, direct-upload deployment drift,
 short log retention, assistant-ID fallback risk, re-fetch timeout sensitivity.
+
+---
+
+## Closing evidence — 2026-09-22 canary
+
+Call `01a0ca36-b033-711b-9da1-a6c168b3bccc`, 2026-09-22 17:42:56 → 17:45:41 UTC,
+`assistant-ended-call`. Vercel runtime logs for the window had already expired
+(`ExceedsBillingLimitError`, defect 7); the delivered email was the durable
+record instead, and a better one — it is the artifact this cycle changed.
+
+The same defect, before and after, from the same mailbox:
+
+```
+BEFORE (2026-09-12)  Subject:  [HIGH] New Door4Life Quote Lead — unknown
+                     Customer: unknown
+                               4707160158
+
+AFTER  (2026-09-22)  Subject:  [MEDIUM] New Door4Life Quote Lead — Unknown caller
+                     Customer: 470-716-0158
+```
+
+Reconstructing the lead from the delivered email and re-rendering it through
+this commit reproduced the body **byte-for-byte**
+(`sha256 e24c89cb34fab1491135c71a644cdb155211654745f0d06767a583aec3d74c7c`).
+That is behavioural proof the deployed bundle is this code — stronger than the
+pre-upload file checksums, which only proved what was sent.
+
+| Criterion | Result |
+|---|---|
+| Placeholder normalization (change 1) | **Proven in production** — the real defect, fixed, observed live |
+| Callback plausibility (change 2) | **Happy path only** — `470-716-0158` plausible, correctly unflagged |
+| Malformed value preserved (change 3) | **Not exercised** — no malformed value occurred |
+| Uncertainty reaches the reader (change 4) | **Negative confirmation** — clean lead, correctly no banner |
+| No regression | **Proven** — every field rendered correctly |
+| Exactly one notification | **Proven from the recipient side** — one lead email among five threads that day |
+
+### What remains outstanding
+
+The `false` branch of `phonePlausibility` has never run in production. It is
+covered by unit tests and by the `404404404` evidence that motivated the cycle,
+but no live call has yet produced an undialable number since deploy.
+
+**This is backlog evidence work and does not block Door4Life V1.** The cheapest
+way to close it is a `POST /structured-output/run` preview replay of the
+2026-09-09 call against the current pipeline — no phone call, no writes. That
+replay is also Phase B's test vehicle (B2), so the two close together.
+

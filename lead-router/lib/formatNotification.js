@@ -26,13 +26,22 @@ function yesNo(value) {
   return null;
 }
 
+// Extraction describes the door in the caller's own words, and those words
+// usually already end in the noun — "mahogany French door". Appending it again
+// produced "1 mahogany French door door" on every French-door lead. Strip any
+// trailing door/doors off the description and re-apply the noun ourselves, so
+// the count and the noun always agree no matter how the caller phrased it.
+const TRAILING_DOOR_NOUN = /\s*\bdoors?\s*$/i;
+
 function doorLine(lead) {
   const material = lead.doorMaterialType;
   const count = lead.doorCount;
   if (count === null && !material) return null;
   if (count === null) return sentenceCase(material);
   const noun = count === 1 ? 'door' : 'doors';
-  return material ? `${count} ${material} ${noun}` : `${count} ${noun}`;
+  if (!material) return `${count} ${noun}`;
+  const descriptor = material.replace(TRAILING_DOOR_NOUN, '').trim();
+  return descriptor ? `${count} ${descriptor} ${noun}` : `${count} ${noun}`;
 }
 
 const UNVERIFIED_NUMBER_NOTE = 'could not be read as a valid phone number — verify before calling';
