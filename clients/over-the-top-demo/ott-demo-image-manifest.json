@@ -1,0 +1,19 @@
+{
+  "project": "Over the Top Burger Bar demo",
+  "source": "Current Over the Top Burger Bar menu website",
+  "usage_note": "Demo showcase asset manifest. These URLs point to images already served by the restaurant's current website. For production, obtain owner approval/assets and localize/optimize them.",
+  "images": [
+    { "name": "Georgia Summer", "slug": "georgia-summer", "category": "Signature Burgers", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-tt24n2voq5b0zq1tlvlmw4fgnksr/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "The Hangover", "slug": "the-hangover", "category": "Signature Burgers", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-5vguszywcanpclvqn1ylde8oqbfm/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Flaming Avalanche", "slug": "flaming-avalanche", "category": "Signature Burgers", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-aswmcz83ca06qjhicelqgp2wqdg1/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Buford Blue", "slug": "buford-blue", "category": "Signature Burgers", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-tx7utkfn1cff105yomcetn98n54j/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Hog Wild", "slug": "hog-wild", "category": "Signature Burgers", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-e7sj0p1du5xtv14g2kqmoesllvsa/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "The Big Catch", "slug": "the-big-catch", "category": "Signature Burgers", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-dilhh0tsau36tjze1j1irvznhpbw/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Texas Chicken Rolls", "slug": "texas-chicken-rolls", "category": "Shareables", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-st37rhz6jvweza1wgqy6cjmwte48/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "The Samplers", "slug": "the-samplers", "category": "Shareables", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-9eynsmyid272pffixb29dwwqxq4k/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Loaded Nachos", "slug": "loaded-nachos", "category": "Shareables", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-vgxqktoubo8xp6gq9oj5totgxo3y/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Key to Paradise", "slug": "key-to-paradise", "category": "Shakes", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-bufvjyds2tlgemd86pc0bjhgkxgr/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Cookie Monster", "slug": "cookie-monster", "category": "Shakes", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-95k7r0y7jn28b2fc3ldnhkiqr9z5/fit%3Dcontain%2Cwidth%3D1040" },
+    { "name": "Chocolate Chaos", "slug": "chocolate-chaos", "category": "Desserts", "url": "https://imagedelivery.net/aPDHOWLzkdlEAMvg3YLQug/production-q81kfr1x2xrhhyoc4hyfo20yvbjv/fit%3Dcontain%2Cwidth%3D1040" }
+  ]
+}

@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/*
+ * BRAND TOKENS — matched to Over the Top's existing identity, not invented.
+ *
+ * Read off their live site: dark charcoal ground, magenta action colour on the
+ * Reserve button, deep indigo utility bar, white badge logo. All three prototypes
+ * share these, so Robert is comparing experience decisions, not palettes.
+ *
+ * Exact values still need confirming against their real brand assets.
+ */
+@theme {
+  --color-char:    #1B1819;
+  --color-char-2:  #242021;
+  --color-char-3:  #2E2829;
+  --color-indigo-bar: #2E2B4F;
+
+  --color-magenta:      #D42A6F;
+  --color-magenta-lift: #E84F8C;
+
+  --color-cream: #F7F4F2;
+  --color-ash:   #A9A19E;
+
+  --font-display: var(--font-poppins), "Helvetica Neue", Arial, sans-serif;
+  --font-sans:    var(--font-dm-sans), system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+  }
+  body {
+    background-color: var(--color-char);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2.5px solid var(--color-magenta-lift);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--color-magenta-lift);
+  }
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+
+/*
+ * ===========================================================================
+ * CONCEPT D — Filipino heritage, layered on their own brand
+ * ---------------------------------------------------------------------------
+ * Assumes the owners are Filipino. NOT VERIFIED — all that is confirmed is a
+ * Special Filipino Menu on their current site.
+ *
+ * Two earlier attempts both missed. Flooding every section with flag colour gave
+ * a flat blue slab where the food vanished. Inverting to a paper ground fixed the
+ * legibility but threw away their identity for a palette that was not theirs.
+ *
+ * This version keeps their brand — charcoal ground, their magenta — and treats
+ * the flag as HERITAGE ACCENT on top of it: the blue triangle as geometry, the
+ * gold sun as a mark, the three stars, a tricolour rule, and one full yellow
+ * field where the heritage is actually the subject. Dark also happens to be the
+ * right ground for food, which royal blue is not.
+ *
+ * So there are no colour-token overrides here. Concept D inherits the same base
+ * palette as every other concept and adds to it.
+ *
+ * Flag colours: royal blue #0038A8 · red #CE1126 · golden yellow #FCD116
+ * ===========================================================================
+ */
+.theme-ph {
+  --flag-blue: #0038A8;
+  --flag-red: #CE1126;
+  --flag-gold: #FCD116;
+}
+
+/* The one full-colour field, for the Filipino menu — where heritage IS the subject. */
+.theme-ph .field-yellow {
+  background-color: var(--flag-gold);
+  --color-char-2: #FFFFFF;
+  --color-cream: #10131F;
+  --color-ash: #4A3D0A;
+  --color-magenta: #10131F;
+  --color-magenta-lift: #CE1126;
+  color: #10131F;
+}
+.theme-ph .field-yellow .eyebrow { color: var(--flag-red); }
+
+/* Royal blue panel, used sparingly — the press quote and the table prompt. */
+.theme-ph .field-navy {
+  background-color: var(--flag-blue);
+  --color-char-2: #002B7F;
+  --color-cream: #FFFFFF;
+  --color-ash: #A9C0E8;
+  --color-magenta: var(--flag-gold);
+  --color-magenta-lift: #FFE14D;
+  color: #FFFFFF;
+}
+.theme-ph .field-navy .eyebrow { color: var(--flag-gold); }
+.theme-ph .field-navy .bg-magenta { color: #10131F; }

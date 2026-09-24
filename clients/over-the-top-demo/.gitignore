@@ -1,0 +1,16 @@
+/node_modules
+/.next/
+/out/
+/build
+.DS_Store
+*.pem
+npm-debug.log*
+.env*
+!.env.example
+/docs/shots
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+
+# Review screenshots — regenerated on demand, not worth carrying in the repo.
+/docs/screenshots
