@@ -9,11 +9,12 @@ import type { NextConfig } from "next";
  * emit relative ones — hand-rewriting the output breaks hydration, because Next
  * also embeds asset paths in its bootstrap data.
  *
- * WITH BASE_PATH (e.g. "/overthetop"): absolute URLs under that prefix, for the
- * demo hub at demo.ram-strategicsystems.com. The hub proxies /overthetop/* to
- * this deployment, so every asset request has to carry the prefix on its way
- * back through — relative URLs would only work if the visitor happened to land
- * on a trailing slash, and people paste links without one.
+ * WITH BASE_PATH (e.g. "/overthetop"): Next prefixes every route and asset URL
+ * itself, which is what the demo hub at demo.ram-strategicsystems.com needs.
+ * The hub rewrites /overthetop/* to this deployment and strips the prefix, so a
+ * request for /overthetop/_next/x.js arrives here as /_next/x.js and resolves.
+ * Relative URLs would only work if the visitor happened to land on a trailing
+ * slash, and people paste links without one.
  *
  * `unoptimized` is required by `output: "export"`.
  */
@@ -21,8 +22,12 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const nextConfig: NextConfig = {
   output: "export",
-  ...(basePath ? { basePath } : {}),
-  assetPrefix: basePath ? `${basePath}/assets` : "./assets",
+  /**
+   * With a basePath, Next already prefixes every asset URL, and Vercel serves
+   * the export at that path — so no assetPrefix, or the two stack and the
+   * chunk loader asks for a directory that was never written.
+   */
+  ...(basePath ? { basePath } : { assetPrefix: "./assets" }),
   images: {
     unoptimized: true,
     /**
