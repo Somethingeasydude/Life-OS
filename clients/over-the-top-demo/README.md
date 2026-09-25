@@ -10,7 +10,7 @@ own repo with a `git subtree split` whenever that is wanted.
 
 ## What it is
 
-`/site` is the client build — the Filipino-heritage direction, which is the one
+The root is the client build — the Filipino-heritage direction, which is the one
 Robert chose. `/concept-d` is the same page with a concept switcher for internal
 comparison, and `/lab`, `/v2`, `/concept-a|b|c` are the earlier directions kept
 for reference.
@@ -23,7 +23,7 @@ redeployed.
 
 ```
 npm install
-npm run dev            # http://localhost:3000/site
+npm run dev            # http://localhost:3000
 npm run build          # static export into out/
 ```
 
