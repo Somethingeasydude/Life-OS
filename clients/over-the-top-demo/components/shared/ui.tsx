@@ -3,16 +3,22 @@ import type { ReactNode } from "react";
 type Tone = "primary" | "secondary" | "ghost" | "quiet";
 
 /**
- * One colour family, two weights. The filled pill carries the primary action and
- * the outlined pill everything beside it — both drawn in the brand magenta so a
- * row of buttons reads as one set rather than three unrelated controls. Outline
- * keeps cream text: magenta on charcoal is too low-contrast to sit under a
- * headline. Concept D re-points --color-magenta at the flag gold, so these
- * follow the theme without a second definition.
+ * Buttons are filled, full stop. Robert asked for every pair to match rather than
+ * pit a solid pill against a hollow one — an outline beside a fill reads as the
+ * second option being an afterthought, and on this page both options are worth
+ * the same money.
+ *
+ * `primary` and `secondary` therefore render identically; the names still mark
+ * which action leads, which is what decides their order on the page. The fill is
+ * --color-magenta, and concept D re-points that token per section: charcoal
+ * sections get the brand magenta, the yellow Filipino band gets near-black, the
+ * navy band gets flag gold. One definition, three correct outcomes.
  */
+const FILLED = "bg-magenta text-white hover:bg-magenta-lift";
+
 const TONES: Record<Tone, string> = {
-  primary: "bg-magenta text-white hover:bg-magenta-lift",
-  secondary: "border border-magenta/60 text-cream hover:border-magenta hover:bg-magenta/12",
+  primary: FILLED,
+  secondary: FILLED,
   ghost: "text-cream hover:text-magenta-lift",
   quiet: "text-cream hover:text-magenta-lift",
 };
